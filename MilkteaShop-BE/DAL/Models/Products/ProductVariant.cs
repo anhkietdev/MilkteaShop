@@ -8,7 +8,6 @@ namespace DAL.Models.Products
         public Guid SizeId { get; set; }
         public decimal BasePrice { get; set; }
         public int StockQuantity { get; set; }
-        public bool IsActive { get; set; } = true;
         public virtual Product Product { get; set; }
         public virtual Size Size { get; set; }
         public virtual ICollection<ProductVariantTopping> AvailableToppings { get; set; }
