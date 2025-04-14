@@ -1,4 +1,6 @@
-﻿namespace DAL.Models.Products
+﻿using DAL.Models.Promotions;
+
+namespace DAL.Models.Products
 {
     public class Product : BaseEntity
     {
@@ -6,6 +8,7 @@
         public required string Description { get; set; }      
         public required Guid CategoryId { get; set; }
         public required Category Category { get; set; }
-        public IEnumerable<Topping> Toppings { get; set; } = new List<Topping>();
+        public virtual ICollection<ProductVariant> Variants { get; set; }
+        public virtual ICollection<ComboItem> ComboItems { get; set; }
     }
 }
