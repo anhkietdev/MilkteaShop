@@ -9,6 +9,7 @@ namespace DAL.Repositories.Implements
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly AppDbContext  _context;
+
         internal DbSet<T> dbSet;
 
         public Repository(AppDbContext context)
@@ -34,7 +35,6 @@ namespace DAL.Repositories.Implements
 
             return await query.CountAsync();
         }
-
 
         public async Task<ICollection<T>> GetAllAsync(
             Expression<Func<T, bool>>? filter = null,
@@ -168,13 +168,11 @@ namespace DAL.Repositories.Implements
             return await query.ToListAsync();
         }
 
-
         public Task RemoveAsync(params T[] entities)
         {
             dbSet.RemoveRange(entities);
             return Task.CompletedTask;
         }
-
 
         public Task RemoveRange(IEnumerable<T> entities)
         {
@@ -186,13 +184,11 @@ namespace DAL.Repositories.Implements
             return Task.CompletedTask;
         }
 
-
         public Task UpdateAsync(T entity)
         {
             dbSet.Update(entity);
             return Task.CompletedTask;
         }
-
 
         public Task UpdateRange(IEnumerable<T> entities)
         {
