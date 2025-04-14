@@ -1,4 +1,8 @@
-﻿namespace DAL.Context
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+
+namespace DAL.Context
 {
     //public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     //{

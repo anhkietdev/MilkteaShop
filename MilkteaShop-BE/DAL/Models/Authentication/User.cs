@@ -10,7 +10,6 @@ namespace DAL.Models.Authentication
         public required string Address { get; set; }
         public required string PhoneNumber { get; set; }
         public required string Email { get; set; }
-        public required Guid RoleId { get; set; }
         public required UserRole Role { get; set; }
         public decimal? MoneyAmount { get; set; }
         public virtual IEnumerable<Order>? Orders { get; set; }
