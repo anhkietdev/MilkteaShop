@@ -1,4 +1,6 @@
-﻿using DAL.Models;
+﻿using DAL.Models.Authentication;
+using DAL.Models.Orders;
+using DAL.Models.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Context

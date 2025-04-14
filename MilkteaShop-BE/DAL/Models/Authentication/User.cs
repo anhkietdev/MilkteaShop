@@ -1,4 +1,6 @@
-﻿namespace DAL.Models
+﻿using DAL.Models.Orders;
+
+namespace DAL.Models.Authentication
 {
     public class User : BaseEntity
     {
