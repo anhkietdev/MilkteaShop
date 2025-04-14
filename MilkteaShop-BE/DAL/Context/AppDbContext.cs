@@ -3,6 +3,8 @@ using DAL.Models.Orders;
 using DAL.Models.Products;
 using DAL.Models.Promotions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace DAL.Context
 {
@@ -32,16 +34,39 @@ namespace DAL.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
             base.OnModelCreating(modelBuilder);
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         {
-            if (!optionsBuilder.IsConfigured)
+            public AppDbContext CreateDbContext(string[] args)
             {
-                optionsBuilder.UseSqlServer("Server=.;Database=PizzaApp;Trusted_Connection=True;");
+
+                string presentationDir = @"D:\fpt\B3W\MilkteaShop\MilkteaShop-BE\Presentation";
+
+                // Ensure the directory exists
+                if (!Directory.Exists(presentationDir))
+                {
+                    throw new DirectoryNotFoundException($"Presentation directory not found at {presentationDir}");
+                }
+
+                // Build config from the Presentation project location
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(presentationDir)
+                    .AddJsonFile("appsettings.json", optional: false)
+                    .Build();
+
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+                var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+                optionsBuilder.UseSqlServer(connectionString);
+
+                return new AppDbContext(optionsBuilder.Options);
             }
-        }
+        }   
+
+
 
     }
     
