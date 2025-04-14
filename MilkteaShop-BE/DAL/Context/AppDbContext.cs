@@ -27,46 +27,14 @@ namespace DAL.Context
         public DbSet<Size> Sizes { get; set; }
         #endregion
 
-
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
-        }
-
-        public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-        {
-            public AppDbContext CreateDbContext(string[] args)
-            {
-
-                string presentationDir = @"D:\fpt\B3W\MilkteaShop\MilkteaShop-BE\Presentation";
-
-                // Ensure the directory exists
-                if (!Directory.Exists(presentationDir))
-                {
-                    throw new DirectoryNotFoundException($"Presentation directory not found at {presentationDir}");
-                }
-
-                // Build config from the Presentation project location
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                    .SetBasePath(presentationDir)
-                    .AddJsonFile("appsettings.json", optional: false)
-                    .Build();
-
-                var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-                var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-                optionsBuilder.UseSqlServer(connectionString);
-
-                return new AppDbContext(optionsBuilder.Options);
-            }
-        }   
-
-
+        } 
 
     }
     
