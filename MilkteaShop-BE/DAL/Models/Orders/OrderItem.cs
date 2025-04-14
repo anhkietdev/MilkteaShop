@@ -1,5 +1,5 @@
-﻿using DAL.Models.Product;
-using DAL.Models.Promotion;
+﻿using DAL.Models.Products;
+using DAL.Models.Promotions;
 
 namespace DAL.Models.Orders
 {

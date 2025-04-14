@@ -1,4 +1,4 @@
-﻿using DAL.Models.Product;
+﻿using DAL.Models.Products;
 
 namespace DAL.Models.Orders
 {
