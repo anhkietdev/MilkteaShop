@@ -6,7 +6,6 @@
         public Guid UserId { get; set; } 
         public OrderStatus Status { get; set; }
         public decimal TotalAmount { get; set; }
-
         public string? Note { get; set; }
         public DateTime? CompletedAt { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }

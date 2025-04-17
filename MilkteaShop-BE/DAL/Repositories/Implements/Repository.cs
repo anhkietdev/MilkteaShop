@@ -44,15 +44,8 @@ namespace DAL.Repositories.Implements
             bool tracked = false
         )
         {
-            IQueryable<T> query;
-            if (tracked)
-            {
-                query = dbSet;
-            }
-            else
-            {
-                query = dbSet.AsNoTracking();
-            }
+            IQueryable<T> query = tracked ? dbSet : dbSet.AsNoTracking();
+            
             if (filter != null)
             {
                 query = query.Where(filter);

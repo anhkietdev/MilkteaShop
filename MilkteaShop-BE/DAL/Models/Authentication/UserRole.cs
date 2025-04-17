@@ -5,6 +5,5 @@
         Admin,         
         Manager,      
         Staff,
-        Customer
     }
 }
