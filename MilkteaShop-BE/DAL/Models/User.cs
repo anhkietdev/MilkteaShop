@@ -8,5 +8,6 @@
         public required string PhoneNumber { get; set; }
         public string? ImageUrl { get; set; }
         public Role Role { get; set; }
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

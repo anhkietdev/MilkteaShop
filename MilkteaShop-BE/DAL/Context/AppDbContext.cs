@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Context
 {
@@ -6,6 +7,14 @@ namespace DAL.Context
     {
         #region DbSets
         // DbSets for the entities in the application
+        public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<CategoryExtraMapping> CategoryExtraMappings { get; set; }
+        public DbSet<ComboItem> ComboItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<Product> Products { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -15,7 +24,122 @@ namespace DAL.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-        } 
+
+            // Category Relationships
+            modelBuilder.Entity<Category>(entity =>
+            {
+                // Category - Product (One-to-Many)
+                entity.HasMany(c => c.Products)
+                      .WithOne(p => p.Category)
+                      .HasForeignKey(p => p.CategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Category - CategoryExtraMapping (One-to-Many)
+                entity.HasMany(c => c.CategoryExtraMappings)
+                      .WithOne(m => m.MainCategory)
+                      .HasForeignKey(m => m.MainCategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+
+            // CategoryExtraMapping Relationships
+            modelBuilder.Entity<CategoryExtraMapping>(entity =>
+            {
+                // CategoryExtraMapping - MainCategory (Many-to-One)
+                entity.HasOne(m => m.MainCategory)
+                      .WithMany()
+                      .HasForeignKey(m => m.MainCategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // CategoryExtraMapping - ExtraCategory (Many-to-One)
+                entity.HasOne(m => m.ExtraCategory)
+                      .WithMany()
+                      .HasForeignKey(m => m.ExtraCategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+
+            // Product Relationships
+            modelBuilder.Entity<Product>(entity =>
+            {
+                // Product - Category (Many-to-One) - already defined in Category
+
+                // Product - OrderItem (One-to-Many)
+                entity.HasMany(p => p.OrderItems)
+                      .WithOne(oi => oi.Product)
+                      .HasForeignKey(oi => oi.ProductId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Product - ComboItem (One-to-Many)
+                entity.HasMany(p => p.ComboItems)
+                      .WithOne(ci => ci.Product)
+                      .HasForeignKey(ci => ci.ProductId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+
+            // ComboItem Relationships
+            modelBuilder.Entity<ComboItem>(entity =>
+            {
+                // ComboItem - Product (Many-to-One) - already defined in Product
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+
+            // Order Relationships
+            modelBuilder.Entity<Order>(entity =>
+            {
+
+                // Order - PaymentMethod (Many-to-One)
+                entity.HasOne(o => o.PaymentMethod)
+                      .WithMany(p => p.Orders)
+                      .HasForeignKey(o => o.PaymentMethodId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Order - OrderItem (One-to-Many)
+                entity.HasMany(o => o.OrderItems)
+                      .WithOne(oi => oi.Order)
+                      .HasForeignKey(oi => oi.OrderId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+
+            // OrderItem Relationships
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                // OrderItem - Order (Many-to-One) - already defined in Order
+
+                // OrderItem - Product (Many-to-One) - already defined in Product
+
+                // OrderItem - OrderItem (Self-referencing for toppings)
+                entity.HasOne<OrderItem>()
+                      .WithMany()
+                      .HasForeignKey("ParentOrderItemId")
+                      .IsRequired(false)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+
+            // PaymentMethod Relationships
+            modelBuilder.Entity<PaymentMethod>(entity =>
+            {
+                // PaymentMethod - Order (One-to-Many) - already defined in Order
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+        }
 
     }
     
