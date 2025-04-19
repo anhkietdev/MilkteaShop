@@ -121,10 +121,9 @@ namespace DAL.Context
                 // OrderItem - Product (Many-to-One) - already defined in Product
 
                 // OrderItem - OrderItem (Self-referencing for toppings)
-                entity.HasOne<OrderItem>()
-                      .WithMany()
-                      .HasForeignKey("ParentOrderItemId")
-                      .IsRequired(false)
+                entity.HasOne(o => o.ParentOrderItem)
+                      .WithMany(o => o.ToppingItems)
+                      .HasForeignKey(o => o.ParentOrderItemId)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 // Soft Delete Filter

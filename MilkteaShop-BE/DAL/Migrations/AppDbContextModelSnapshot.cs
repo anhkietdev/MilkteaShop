@@ -222,9 +222,6 @@ namespace DAL.Migrations
                     b.Property<Guid?>("ParentOrderItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ParentOrderItemId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -245,8 +242,6 @@ namespace DAL.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ParentOrderItemId");
-
-                    b.HasIndex("ParentOrderItemId1");
 
                     b.HasIndex("ProductId");
 
@@ -450,14 +445,10 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.OrderItem", null)
-                        .WithMany()
-                        .HasForeignKey("ParentOrderItemId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("DAL.Models.OrderItem", "ParentOrderItem")
                         .WithMany("ToppingItems")
-                        .HasForeignKey("ParentOrderItemId1");
+                        .HasForeignKey("ParentOrderItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DAL.Models.Product", "Product")
                         .WithMany("OrderItems")

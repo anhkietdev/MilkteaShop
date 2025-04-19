@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class updateModels4 : Migration
+    public partial class fixOrderItem : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -210,7 +210,6 @@ namespace DAL.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentOrderItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ParentOrderItemId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -227,11 +226,6 @@ namespace DAL.Migrations
                         principalTable: "OrderItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_OrderItems_ParentOrderItemId1",
-                        column: x => x.ParentOrderItemId1,
-                        principalTable: "OrderItems",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
@@ -275,11 +269,6 @@ namespace DAL.Migrations
                 name: "IX_OrderItems_ParentOrderItemId",
                 table: "OrderItems",
                 column: "ParentOrderItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ParentOrderItemId1",
-                table: "OrderItems",
-                column: "ParentOrderItemId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_ProductId",
