@@ -34,7 +34,7 @@ namespace BAL.Services.Implement
             var secretKey = _configuration["JwtSettings:SecretKey"];
             var issuer = _configuration["JwtSettings:Issuer"];
             var audience = _configuration["JwtSettings:Audience"];
-            string token = JwtTokenGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
+            string token = JwtGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
             return new AuthenResultDto
             {
                 IsSuccess = true,
@@ -66,7 +66,7 @@ namespace BAL.Services.Implement
             var secretKey = _configuration["JwtSettings:SecretKey"];
             var issuer = _configuration["JwtSettings:Issuer"];
             var audience = _configuration["JwtSettings:Audience"];
-            string token = JwtTokenGenerator.GenerateToken(newUser, secretKey, 1000000, issuer, audience);
+            string token = JwtGenerator.GenerateToken(newUser, secretKey, 1000000, issuer, audience);
 
             return new AuthenResultDto
             {

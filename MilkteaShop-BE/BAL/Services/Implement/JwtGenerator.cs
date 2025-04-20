@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BAL.Services.Implement
 {
-    public static class JwtTokenGenerator 
+    public static class JwtGenerator 
     {
         public static string GenerateToken(this User user, string secretKey, int expiredMinutes, string issuer, string audience)
         {
