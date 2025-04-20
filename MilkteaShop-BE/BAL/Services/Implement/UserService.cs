@@ -1,5 +1,6 @@
 ﻿using BAL.Dtos;
 using BAL.Services.Interface;
+using DAL.Models;
 using DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 
@@ -16,7 +17,7 @@ namespace BAL.Services.Implement
             _configuration = configuration;
         }
 
-        public async Task<LoginResultDto> LoginAsync(LoginDto loginDto)
+        public async Task<AuthenResultDto> LoginAsync(LoginDto loginDto)
         {
             var user = await _unitOfWork.Users.GetAsync(
                 u => u.Username == loginDto.Username && u.PasswordHash == loginDto.Password,
@@ -25,7 +26,7 @@ namespace BAL.Services.Implement
 
             if (user == null)
             {
-                return new LoginResultDto
+                return new AuthenResultDto
                 {
                     IsSuccess = false,
                 };
@@ -34,16 +35,44 @@ namespace BAL.Services.Implement
             var issuer = _configuration["JwtSettings:Issuer"];
             var audience = _configuration["JwtSettings:Audience"];
             string token = JwtTokenGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
-            return new LoginResultDto
+            return new AuthenResultDto
             {
                 IsSuccess = true,
                 Token = token,
             };        
         }
 
-        public Task<bool> RegisterAsync(RegisterDto registerDto)
+        public async Task<AuthenResultDto> RegisterAsync(RegisterDto registerDto)
         {
-            throw new NotImplementedException();
+            var newUser = new User
+            {
+                Username = registerDto.Username,
+                PasswordHash = registerDto.Password,
+                PhoneNumber = registerDto.PhoneNumber,
+            };
+
+            var result = _unitOfWork.Users.AddAsync(newUser);
+
+            await _unitOfWork.SaveAsync();
+
+            if (newUser == null)
+            {
+                return new AuthenResultDto
+                {
+                    IsSuccess = false,
+                };
+            }
+
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            var issuer = _configuration["JwtSettings:Issuer"];
+            var audience = _configuration["JwtSettings:Audience"];
+            string token = JwtTokenGenerator.GenerateToken(newUser, secretKey, 1000000, issuer, audience);
+
+            return new AuthenResultDto
+            {
+                IsSuccess = true,
+                Token = token,
+            };
         }
     }
 }

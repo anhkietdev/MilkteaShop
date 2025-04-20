@@ -13,12 +13,23 @@ namespace Presentation.Controllers.AuthenticationController
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login([FromQuery]LoginDto loginDto)
+        public async Task<IActionResult> Login([FromQuery] LoginDto loginDto)
         {
             var token = await _userService.LoginAsync(loginDto);
             if (!token.IsSuccess)
             {
                 return BadRequest(new { message = "Invalid username or password" });
+            }
+            return Ok(token);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        {
+            var token = await _userService.RegisterAsync(registerDto);
+            if (!token.IsSuccess)
+            {
+                return BadRequest(new { message = "Registration failed" });
             }
             return Ok(token);
         }
