@@ -3,7 +3,7 @@ using DAL.Repositories.Interfaces;
 
 namespace DAL.Repositories.Implements
 {
-    internal class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
 
@@ -23,17 +23,17 @@ namespace DAL.Repositories.Implements
 
         public IPaymentMethodRepository PaymentMethods { get; private set; }
 
-        public UnitOfWork(AppDbContext context, IUserRepository users, IProductRepository products, ICategoryRepository categories, IOrderRepository orders, IComboItemRepository comboItems, ICategoryExtraMappingRepository categoryExtraMappings, IOrderItemRepository orderItems, IPaymentMethodRepository paymentMethods)
+        public UnitOfWork(AppDbContext context)
         {
             _context = context;
             Users = new UserRepository(_context);
-            Products = products;
-            Categories = categories;
-            Orders = orders;
-            ComboItems = comboItems;
-            CategoryExtraMappings = categoryExtraMappings;
-            OrderItems = orderItems;
-            PaymentMethods = paymentMethods;
+            Products = new ProductRepository(_context);
+            Categories = new CategoryRepository(_context);
+            Orders = new OrderRepository(_context);
+            ComboItems = new ComboItemRepository(_context);
+            CategoryExtraMappings = new CategoryExtraMappingRepository(_context);
+            OrderItems = new OrderItemRepository(_context);
+            PaymentMethods = new PaymentMethodRepository(_context);
         }
 
         public async Task SaveAsync()
