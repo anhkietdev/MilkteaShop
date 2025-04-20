@@ -26,7 +26,7 @@ namespace DAL.Repositories.Implements
         public UnitOfWork(AppDbContext context, IUserRepository users, IProductRepository products, ICategoryRepository categories, IOrderRepository orders, IComboItemRepository comboItems, ICategoryExtraMappingRepository categoryExtraMappings, IOrderItemRepository orderItems, IPaymentMethodRepository paymentMethods)
         {
             _context = context;
-            Users = users;
+            Users = new UserRepository(_context);
             Products = products;
             Categories = categories;
             Orders = orders;
