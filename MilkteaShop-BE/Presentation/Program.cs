@@ -15,9 +15,7 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
+builder.Services.ResolveConnectionString(connectionString);
 builder.Services.ResolveServices();
 
 var app = builder.Build();
