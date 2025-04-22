@@ -1,4 +1,6 @@
-﻿using BAL.Services.Implement;
+﻿using AutoMapper;
+using BAL;
+using BAL.Services.Implement;
 using BAL.Services.Interface;
 using DAL.Models;
 using DAL.Repositories.Implements;
@@ -11,6 +13,7 @@ namespace Presentation.ResolveDependencies
         public static IServiceCollection ResolveServices(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
