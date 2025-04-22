@@ -9,7 +9,9 @@ namespace BAL
         public AutoMapperProfile()
         {
             // Create mappings between DTOs and entities here
+
             CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
         }
     }
 }
