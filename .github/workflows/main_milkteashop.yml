@@ -63,9 +63,10 @@ jobs:
         with:
           app-name: 'galaxycinema'
           slot-name: 'Production'
-          settings-json: |
+          connection-strings-json: |
             {
               "ConnectionStrings__DefaultConnection": "${{ secrets.CONNECTION_STRING }}"
+              "type": "SQLServer"
             }    
 
       - name: Deploy to Azure Web App
