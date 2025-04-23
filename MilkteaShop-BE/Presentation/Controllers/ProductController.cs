@@ -19,7 +19,7 @@ namespace Presentation.Controllers
             return Ok(products);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var product = await _productService.GetByIdAsync(id);
@@ -33,7 +33,7 @@ namespace Presentation.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] ProductDto productDto)
         {
             await _productService.UpdateAsync(id, productDto);

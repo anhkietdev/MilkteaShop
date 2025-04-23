@@ -1,18 +1,19 @@
-﻿using AutoMapper;
-using BAL;
+﻿using BAL;
 using BAL.Services.Implement;
 using BAL.Services.Interface;
-using DAL.Models;
+using DAL.Context;
 using DAL.Repositories.Implements;
 using DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Presentation.ResolveDependencies
 {
     public static class ResolveBussinessLogic
     {
-        public static IServiceCollection ResolveServices(this IServiceCollection services)
+        public static IServiceCollection ResolveServices(this IServiceCollection services, string connectionString)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
             services.AddScoped<IUserService, UserService>();
@@ -27,6 +28,9 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<ICategoryExtraMappingRepository, CategoryExtraMappingRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+
+            services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
+
 
             return services;
         }
