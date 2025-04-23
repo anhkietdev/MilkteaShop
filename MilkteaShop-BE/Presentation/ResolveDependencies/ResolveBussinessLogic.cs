@@ -32,7 +32,13 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 
-            services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
+            services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString, sqlOptions => {
+                sqlOptions.CommandTimeout(30);
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+            }));
 
 
             return services;
