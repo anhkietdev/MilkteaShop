@@ -63,12 +63,8 @@ jobs:
         with:
           app-name: 'milkteashop'
           slot-name: 'Production'
-          connection-strings-json: |
-            {
-              "ConnectionStrings__DefaultConnection": "${{ secrets.CONNECTION_STRING }}"
-              "type": "SQLServer"
-            }    
-
+          connection-strings-json: ${{ secrets.CONNECTION_STRING }}
+ 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
