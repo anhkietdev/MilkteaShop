@@ -61,7 +61,7 @@ jobs:
       - name: Set Connection String as App Setting in Azure Web App
         uses: azure/appservice-settings@v1
         with:
-          app-name: 'galaxycinema'
+          app-name: 'milkteashop'
           slot-name: 'Production'
           connection-strings-json: |
             {
