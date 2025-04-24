@@ -27,7 +27,7 @@ namespace Presentation.Controllers
                 // Test 2: Thử đọc dữ liệu đơn giản
                 // Thay "Users" bằng tên bảng thực tế trong DB của bạn
                 var testQuery = await _dbContext.Database
-                    .ExecuteSqlRawAsync("SELECT 1");
+                    .ExecuteSqlRawAsync("SELECT * FROM Users");
 
                 return Ok(new
                 {
