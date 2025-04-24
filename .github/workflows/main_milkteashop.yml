@@ -57,13 +57,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E90D153B24D640B39D6A962688A57FCC }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1A7DD20766584C52A5585C8539EED0DD }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D1FDC8FAFAC24B448ADB863CFEB7A51E }}
-
-      - name: Set Connection String as App Setting in Azure Web App
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: 'milkteashop'
-          slot-name: 'Production'
-          connection-strings-json: ${{ secrets.CONNECTION_STRING }}
  
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
