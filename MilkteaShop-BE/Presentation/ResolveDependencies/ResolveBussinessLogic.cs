@@ -40,6 +40,18 @@ namespace Presentation.ResolveDependencies
                     errorNumbersToAdd: null);
             }));
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
+
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
 
             return services;
         }
