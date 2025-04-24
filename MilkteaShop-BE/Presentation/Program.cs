@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Presentation.ResolveDependencies;
+using System.Net;
 
 internal class Program
 {
@@ -28,7 +29,20 @@ internal class Program
 
         var app = builder.Build();
 
-
+        app.UseExceptionHandler(appError =>
+        {
+            appError.Run(async context =>
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/json";
+                // Log error details here
+                await context.Response.WriteAsync(new
+                {
+                    context.Response.StatusCode,
+                    Message = "Internal Server Error."
+                }.ToString());
+            });
+        });
 
 
         ConfigurePipeline(app);
@@ -47,6 +61,8 @@ internal class Program
 
             // Endpoint routing
             app.MapControllers();
+
+
         }
     }
 }
