@@ -24,7 +24,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "milkteashop-fmcufmfkaja8d6ec.southeastasia-01.azurewebsites.net",
+      "applicationUrl": "https://milkteashop-fmcufmfkaja8d6ec.southeastasia-01.azurewebsites.net/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
