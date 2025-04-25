@@ -20,7 +20,8 @@ namespace BAL.Services.Implement
         public async Task<AuthenResultDto> LoginAsync(LoginDto loginDto)
         {
             var user = await _unitOfWork.Users.GetAsync(
-                u => u.Username == loginDto.Username && u.PasswordHash == loginDto.Password,
+                u => (u.Username == loginDto.Username || u.PhoneNumber == loginDto.PhoneNumber)
+                     && u.PasswordHash == loginDto.Password,
                 tracked: false
             );
 
@@ -31,16 +32,36 @@ namespace BAL.Services.Implement
                     IsSuccess = false,
                 };
             }
+
             var secretKey = _configuration["JwtSettings:SecretKey"];
             var issuer = _configuration["JwtSettings:Issuer"];
             var audience = _configuration["JwtSettings:Audience"];
             string token = JwtGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
+
             return new AuthenResultDto
             {
                 IsSuccess = true,
                 Token = token,
-            };        
+               
+                    Username = user.Username,
+                    PhoneNumber = user.PhoneNumber,
+                    Email = user.Email,
+                    ImageUrl = user.ImageUrl,
+                    Role = user.Role.ToString()
+                
+            };
         }
+
+        public async Task<ICollection<User>> GetAllUserAsync()
+        {
+            ICollection<User> users = await _unitOfWork.Users.GetAllAsync();
+            if (users== null)
+            {
+                throw new Exception("No User found");
+            }
+            return users;
+        }
+
 
         public async Task<AuthenResultDto> RegisterAsync(RegisterDto registerDto)
         {
