@@ -1,4 +1,5 @@
 ﻿using BAL.Dtos;
+using DAL.Models;
 
 namespace BAL.Services.Interface
 {
@@ -6,5 +7,6 @@ namespace BAL.Services.Interface
     {
         Task<AuthenResultDto> LoginAsync(LoginDto loginDto);
         Task<AuthenResultDto> RegisterAsync(RegisterDto registerDto);
+        Task<ICollection<User>> GetAllUserAsync();
     }
 }

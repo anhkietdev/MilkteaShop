@@ -1,4 +1,4 @@
-﻿namespace DAL.Models
+﻿   namespace DAL.Models
 {
     public class Category : BaseEntity
     {

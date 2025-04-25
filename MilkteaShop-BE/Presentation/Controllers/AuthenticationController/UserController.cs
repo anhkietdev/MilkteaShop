@@ -1,4 +1,5 @@
 ﻿using BAL.Dtos;
+using BAL.Services.Implement;
 using BAL.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,16 +13,28 @@ namespace Presentation.Controllers.AuthenticationController
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Login([FromQuery] LoginDto loginDto)
+ 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var token = await _userService.LoginAsync(loginDto);
-            if (!token.IsSuccess)
+            var result = await _userService.LoginAsync(loginDto);
+
+            if (!result.IsSuccess)
             {
-                return BadRequest(new { message = "Invalid username or password" });
+                return Unauthorized(new { message = "Invalid username, phone number, or password" });
             }
-            return Ok(token);
+
+            return Ok(result);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userService.GetAllUserAsync();
+            return Ok(users);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
