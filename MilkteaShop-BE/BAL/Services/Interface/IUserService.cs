@@ -1,5 +1,6 @@
 ﻿using BAL.Dtos;
 using DAL.Models;
+using System.Threading.Tasks;
 
 namespace BAL.Services.Interface
 {
@@ -8,5 +9,7 @@ namespace BAL.Services.Interface
         Task<AuthenResultDto> LoginAsync(LoginDto loginDto);
         Task<AuthenResultDto> RegisterAsync(RegisterDto registerDto);
         Task<ICollection<User>> GetAllUserAsync();
+        Task UpdateUserAsync(Guid id, UserDto userDto);
+        Task<User> GetUserByIdAsync(Guid id);
     }
 }

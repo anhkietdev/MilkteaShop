@@ -14,7 +14,7 @@ namespace Presentation.Controllers.AuthenticationController
         }
 
  
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var result = await _userService.LoginAsync(loginDto);
@@ -36,6 +36,7 @@ namespace Presentation.Controllers.AuthenticationController
         }
 
 
+
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
@@ -46,5 +47,29 @@ namespace Presentation.Controllers.AuthenticationController
             }
             return Ok(token);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+
+            return Ok(user);
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserDto userDto)
+        {
+            try
+            {
+                await _userService.UpdateUserAsync(id, userDto);
+                return NoContent(); // 204 if success
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+
+
     }
 }
