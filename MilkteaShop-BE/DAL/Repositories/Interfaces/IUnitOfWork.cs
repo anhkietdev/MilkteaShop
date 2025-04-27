@@ -8,8 +8,7 @@
         public IOrderRepository Orders { get; }
         public IComboItemRepository ComboItems { get; }
         public ICategoryExtraMappingRepository CategoryExtraMappings { get; }
-        public IOrderItemRepository OrderItems { get; }
-        public IPaymentMethodRepository PaymentMethods { get; }
+        public IOrderItemRepository OrderItems { get; }        
         Task SaveAsync();
     }
 }

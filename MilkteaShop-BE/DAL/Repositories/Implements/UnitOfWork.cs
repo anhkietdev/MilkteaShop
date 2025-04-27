@@ -19,9 +19,7 @@ namespace DAL.Repositories.Implements
 
         public ICategoryExtraMappingRepository CategoryExtraMappings { get; private set; }
 
-        public IOrderItemRepository OrderItems { get; private set; }
-
-        public IPaymentMethodRepository PaymentMethods { get; private set; }
+        public IOrderItemRepository OrderItems { get; private set; }        
 
         public UnitOfWork(AppDbContext context)
         {
@@ -32,8 +30,7 @@ namespace DAL.Repositories.Implements
             Orders = new OrderRepository(_context);
             ComboItems = new ComboItemRepository(_context);
             CategoryExtraMappings = new CategoryExtraMappingRepository(_context);
-            OrderItems = new OrderItemRepository(_context);
-            PaymentMethods = new PaymentMethodRepository(_context);
+            OrderItems = new OrderItemRepository(_context);            
         }
 
         public async Task SaveAsync()

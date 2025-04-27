@@ -29,8 +29,7 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IComboItemRepository, ComboItemRepository>();
             services.AddScoped<ICategoryExtraMappingRepository, CategoryExtraMappingRepository>();
-            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
-            services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();            
 
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString, sqlOptions => {
                 sqlOptions.CommandTimeout(30);

@@ -21,6 +21,11 @@ namespace BAL.Services.Implement
             _mapper = mapper;
         }
 
+        public Task<Order> CreateOrderAsync(Order order)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ICollection<Order>> GetAllAsync()
         {
             ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync();
