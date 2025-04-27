@@ -67,11 +67,9 @@ namespace BAL.Services.Implement
             _mapper.Map(productDto, product);
 
             // Update the product with the new values
-            product.ProductName = productDto.ProductName;
-            product.Price = productDto.Price;
+            product.ProductName = productDto.ProductName;            
             product.Description = productDto.Description;
-            product.ImageUrl = productDto.ImageUrl;
-            product.Size = productDto.Size;
+            product.ImageUrl = productDto.ImageUrl;           
             product.CategoryId = productDto.CategoryId;
 
 

@@ -61,7 +61,6 @@ namespace BAL.Services.Implement
             comboItem.ProductId = comboItemDto.ProductId;
             comboItem.Description = comboItemDto.Description;
             comboItem.Product.ProductName = comboItemDto.ProductName;
-            comboItem.Product.Price = comboItemDto.Price;
             comboItem.Quantity = comboItemDto.Quantity;
             await _unitOfWork.ComboItems.UpdateAsync(comboItem); 
 

@@ -72,5 +72,27 @@ namespace Presentation.Controllers.AuthenticationController
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        [HttpPost("deposit")]
+        public async Task<IActionResult> AddMoney([FromBody] AddMoneyRequest request)
+        {
+            try
+            {
+                await _userService.AddMoneyToWalletAsync(request.Id, request.Amount);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        public class AddMoneyRequest
+        {
+            public Guid Id { get; set; }
+            public decimal Amount { get; set; }
+        }
+
+
     }
 }
