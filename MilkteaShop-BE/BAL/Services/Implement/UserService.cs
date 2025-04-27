@@ -1,4 +1,5 @@
-﻿using BAL.Dtos;
+﻿using AutoMapper;
+using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
@@ -10,9 +11,11 @@ namespace BAL.Services.Implement
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
-
-        public UserService(IUnitOfWork unitOfWork, IConfiguration configuration)
+        
+        private readonly IMapper _mapper;
+        public UserService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper)
         {
+            _mapper = mapper;
             _unitOfWork = unitOfWork;
             _configuration = configuration;
         }
@@ -63,6 +66,7 @@ namespace BAL.Services.Implement
         }
 
 
+
         public async Task<AuthenResultDto> RegisterAsync(RegisterDto registerDto)
         {
             var newUser = new User
@@ -95,5 +99,47 @@ namespace BAL.Services.Implement
                 Token = token,
             };
         }
+        public async Task<User> GetUserByIdAsync(Guid id)
+        {
+            User? users = await _unitOfWork.Users.GetAsync(c => c.Id == id);
+            if (users == null)
+            {
+                throw new Exception("User not found");
+            }
+            return users;
+        }
+
+
+
+        public async Task UpdateUserAsync(Guid id, UserDto userDto)
+        {
+            var user = await _unitOfWork.Users.GetAsync(c => c.Id == id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+
+            _mapper.Map(userDto, user);
+
+            user.Username = userDto.Username;
+            user.Email = userDto.Email;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.ImageUrl = userDto.ImageUrl;
+
+            // Safe parsing of Role from string
+            if (Enum.TryParse<Role>(userDto.Role, true, out var role)) // true => case-insensitive
+            {
+                user.Role = role;
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid role value: {userDto.Role}");
+            }
+
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveAsync();
+        }
+  
+
     }
 }

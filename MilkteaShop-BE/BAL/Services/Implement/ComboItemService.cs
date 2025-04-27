@@ -56,7 +56,7 @@ namespace BAL.Services.Implement
             {
                 throw new Exception("ComboItem not found");
             }
-            _mapper.Map(comboItemDto, comboItemDto);
+            _mapper.Map(comboItemDto, comboItem);
 
             comboItem.ProductId = comboItemDto.ProductId;
             comboItem.Description = comboItemDto.Description;
