@@ -10,6 +10,7 @@
         public virtual ICollection<OrderItem>? OrderItems { get; set; }
         public virtual ICollection<ComboItem>? ComboItems { get; set; }
         public string? ProductType { get; set; }
+        public virtual ICollection<ProductSize> ProductSizes { get; set; } = new List<ProductSize>();
     }
 }
 
