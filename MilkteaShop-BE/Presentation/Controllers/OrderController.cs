@@ -1,6 +1,5 @@
 ﻿using BAL.Dtos;
 using BAL.Services.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
