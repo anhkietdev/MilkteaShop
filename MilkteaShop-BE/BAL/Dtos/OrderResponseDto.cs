@@ -4,6 +4,7 @@ namespace BAL.Dtos
 {
     public class OrderResponseDto
     {
+        public Guid Id { get; set; }
         public string? OrderNumber { get; set; }
         public decimal TotalAmount { get; set; }
         public string? Description { get; set; }

@@ -1,4 +1,5 @@
-﻿using BAL.Services.Interface;
+﻿using BAL.Dtos;
+using BAL.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,17 @@ namespace Presentation.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder([FromBody] OrderRequestDto orderDto)
+        {
+            var result = await _orderService.CreateOrderAsync(orderDto);
+            if (result is null)
+            {
+                return BadRequest(new { message = "Order creation failed" });
+            }
+            return Ok(result);
         }
 
         [HttpGet]

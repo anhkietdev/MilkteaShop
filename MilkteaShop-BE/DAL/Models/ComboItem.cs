@@ -4,8 +4,8 @@
     {
         public required string ComboCode { get; set; }
         public string? Description { get; set; }
-        public Guid ProductId { get; set; }
-        public required virtual Product Product { get; set; }
+        public Guid ProductSizeId { get; set; }
+        public required virtual ProductSize ProductSize { get; set; }
         public int Quantity { get; set; }
 
     }

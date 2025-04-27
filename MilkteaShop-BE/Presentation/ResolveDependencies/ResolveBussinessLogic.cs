@@ -23,13 +23,15 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IOrderService, OrderService>();
 
 
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IComboItemRepository, ComboItemRepository>();
             services.AddScoped<ICategoryExtraMappingRepository, CategoryExtraMappingRepository>();
-            services.AddScoped<IOrderItemRepository, OrderItemRepository>();            
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
 
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString, sqlOptions => {
                 sqlOptions.CommandTimeout(30);

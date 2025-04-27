@@ -65,20 +65,6 @@ namespace DAL.Context
             // Product Relationships
             modelBuilder.Entity<Product>(entity =>
             {
-                // Product - Category (Many-to-One) - already defined in Category
-
-                // Product - OrderItem (One-to-Many)
-                entity.HasMany(p => p.OrderItems)
-                      .WithOne(oi => oi.Product)
-                      .HasForeignKey(oi => oi.ProductId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                // Product - ComboItem (One-to-Many)
-                entity.HasMany(p => p.ComboItems)
-                      .WithOne(ci => ci.Product)
-                      .HasForeignKey(ci => ci.ProductId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
                 // Soft Delete Filter
                 entity.HasQueryFilter(e => e.DeletedAt == null);
             });
