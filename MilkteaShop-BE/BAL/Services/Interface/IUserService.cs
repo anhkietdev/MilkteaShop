@@ -11,5 +11,6 @@ namespace BAL.Services.Interface
         Task<ICollection<User>> GetAllUserAsync();
         Task UpdateUserAsync(Guid id, UserDto userDto);
         Task<User> GetUserByIdAsync(Guid id);
+        Task<bool> AddMoneyToWalletAsync(Guid id, decimal amount);
     }
 }
