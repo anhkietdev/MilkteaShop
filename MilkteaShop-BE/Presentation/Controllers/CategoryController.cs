@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
+
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
@@ -20,12 +23,12 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
-          
             return Ok(category);
         }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CategoryDto categoryDto)
         {
@@ -33,15 +36,15 @@ namespace Presentation.Controllers
             return Ok();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CategoryDto categoryDto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] CategoryDto categoryDto)
         {
             await _categoryService.UpdateCategoryAsync(id, categoryDto);
             return Ok();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _categoryService.DeleteCategoryAsync(id);
             if (!result)
@@ -51,4 +54,5 @@ namespace Presentation.Controllers
             return Ok();
         }
     }
+
 }

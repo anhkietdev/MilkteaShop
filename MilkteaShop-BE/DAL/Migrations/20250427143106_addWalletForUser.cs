@@ -5,24 +5,25 @@
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddProductTypeToProduct : Migration
+    public partial class addWalletForUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "ProductType",
-                table: "Products",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.AddColumn<decimal>(
+                name: "WalletBalance",
+                table: "Users",
+                type: "decimal(18,2)",
+                nullable: false,
+                defaultValue: 0m);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ProductType",
-                table: "Products");
+                name: "WalletBalance",
+                table: "Users");
         }
     }
 }

@@ -139,7 +139,18 @@ namespace BAL.Services.Implement
             await _unitOfWork.Users.UpdateAsync(user);
             await _unitOfWork.SaveAsync();
         }
-  
 
+        public async Task<bool> AddMoneyToWalletAsync(Guid id, decimal amount)
+        {
+            var user = await _unitOfWork.Users.GetAsync(c => c.Id == id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+            user.WalletBalance += amount;
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveAsync();
+            return true;
+        }
     }
 }

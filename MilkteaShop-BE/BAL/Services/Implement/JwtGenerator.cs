@@ -40,7 +40,26 @@ namespace BAL.Services.Implement
 
         public static string? GetIdClaim(string token)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(token))
+                return null;
+
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+
+            if (!jwtTokenHandler.CanReadToken(token))
+                return null;
+
+            try
+            {
+                var jwtToken = jwtTokenHandler.ReadJwtToken(token);
+
+                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+                return userIdClaim?.Value;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ComboItemController : BaseController
     {
         private readonly IComboItemService _comboItemService;

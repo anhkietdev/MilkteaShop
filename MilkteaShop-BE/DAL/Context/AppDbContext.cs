@@ -13,7 +13,6 @@ namespace DAL.Context
         public DbSet<ComboItem> ComboItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<Product> Products { get; set; }
         #endregion
 
@@ -66,20 +65,6 @@ namespace DAL.Context
             // Product Relationships
             modelBuilder.Entity<Product>(entity =>
             {
-                // Product - Category (Many-to-One) - already defined in Category
-
-                // Product - OrderItem (One-to-Many)
-                entity.HasMany(p => p.OrderItems)
-                      .WithOne(oi => oi.Product)
-                      .HasForeignKey(oi => oi.ProductId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                // Product - ComboItem (One-to-Many)
-                entity.HasMany(p => p.ComboItems)
-                      .WithOne(ci => ci.Product)
-                      .HasForeignKey(ci => ci.ProductId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
                 // Soft Delete Filter
                 entity.HasQueryFilter(e => e.DeletedAt == null);
             });
@@ -96,13 +81,6 @@ namespace DAL.Context
             // Order Relationships
             modelBuilder.Entity<Order>(entity =>
             {
-
-                // Order - PaymentMethod (Many-to-One)
-                entity.HasOne(o => o.PaymentMethod)
-                      .WithMany(p => p.Orders)
-                      .HasForeignKey(o => o.PaymentMethodId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
                 // Order - OrderItem (One-to-Many)
                 entity.HasMany(o => o.OrderItems)
                       .WithOne(oi => oi.Order)
@@ -125,15 +103,6 @@ namespace DAL.Context
                       .WithMany(o => o.ToppingItems)
                       .HasForeignKey(o => o.ParentOrderItemId)
                       .OnDelete(DeleteBehavior.Restrict);
-
-                // Soft Delete Filter
-                entity.HasQueryFilter(e => e.DeletedAt == null);
-            });
-
-            // PaymentMethod Relationships
-            modelBuilder.Entity<PaymentMethod>(entity =>
-            {
-                // PaymentMethod - Order (One-to-Many) - already defined in Order
 
                 // Soft Delete Filter
                 entity.HasQueryFilter(e => e.DeletedAt == null);

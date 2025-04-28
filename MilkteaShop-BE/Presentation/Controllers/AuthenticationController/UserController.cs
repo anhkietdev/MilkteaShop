@@ -1,21 +1,24 @@
 ﻿using BAL.Dtos;
-using BAL.Services.Implement;
 using BAL.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers.AuthenticationController
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
+
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
 
- 
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        // --------- AUTHENTICATION ---------
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
             var result = await _userService.LoginAsync(loginDto);
 
@@ -27,6 +30,20 @@ namespace Presentation.Controllers.AuthenticationController
             return Ok(result);
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterDto registerDto)
+        {
+            var result = await _userService.RegisterAsync(registerDto);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(new { message = "Registration failed" });
+            }
+
+            return Ok(result);
+        }
+
+        // --------- USER MANAGEMENT ---------
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -35,33 +52,20 @@ namespace Presentation.Controllers.AuthenticationController
             return Ok(users);
         }
 
-
-
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
-        {
-            var token = await _userService.RegisterAsync(registerDto);
-            if (!token.IsSuccess)
-            {
-                return BadRequest(new { message = "Registration failed" });
-            }
-            return Ok(token);
-        }
-
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var user = await _userService.GetUserByIdAsync(id);
-
             return Ok(user);
         }
-        [HttpPut]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UserDto userDto)
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UserDto userDto)
         {
             try
             {
                 await _userService.UpdateUserAsync(id, userDto);
-                return NoContent(); // 204 if success
+                return NoContent(); // 204 No Content
             }
             catch (KeyNotFoundException ex)
             {
@@ -69,6 +73,25 @@ namespace Presentation.Controllers.AuthenticationController
             }
         }
 
+        [HttpPost("deposit")]
+        public async Task<IActionResult> AddMoney([FromBody] AddMoneyRequest request)
+        {
+            try
+            {
+                await _userService.AddMoneyToWalletAsync(request.Id, request.Amount);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        public class AddMoneyRequest
+        {
+            public Guid Id { get; set; }
+            public decimal Amount { get; set; }
+        }
 
 
     }

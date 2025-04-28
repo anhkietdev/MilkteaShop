@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
+using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAL.Services.Implement
 {
@@ -19,6 +15,69 @@ namespace BAL.Services.Implement
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task<OrderResponseDto> CreateOrderAsync(OrderRequestDto orderRequest)
+        {
+            string orderNumber = Order.GenerateOrderNumber();
+            Order newOrder = _mapper.Map<Order>(orderRequest);
+
+            newOrder.OrderNumber = orderNumber;
+            newOrder.CreatedAt = DateTime.UtcNow;
+            newOrder.PaymentMethod = orderRequest.PaymentMethod;
+
+            // Handle order items if they exist in the request
+            if (orderRequest.OrderItems != null && orderRequest.OrderItems.Any())
+            {
+                decimal totalAmount = 0;
+
+                foreach (var itemDto in orderRequest.OrderItems)
+                {
+                    // Check if product exists
+                    var product = await _unitOfWork.ProductSizes.GetAsync(p => p.Id == itemDto.ProductSizeId);
+                    if (product == null)
+                    {
+                        throw new ArgumentException($"Product with ID {itemDto.ProductSizeId} not found.");
+                    }
+
+                    OrderItem orderItem = new OrderItem
+                    {
+                        ProductSizeId = itemDto.ProductSizeId,
+                        ProductSize = product,
+                        Quantity = itemDto.Quantity,
+                        Price = product.Price,
+                        Description = itemDto.Description,
+                        Order = newOrder,
+                    };
+
+                    // Handle parent-child relationships for toppings
+                    if (itemDto.ParentOrderItemId.HasValue)
+                    {
+                        orderItem.ParentOrderItemId = itemDto.ParentOrderItemId;
+                    }
+
+                    // Add to order items collection
+                    newOrder.OrderItems.Add(orderItem);
+
+                    // Calculate item total and add to order total
+                    decimal itemTotal = orderItem.Price * orderItem.Quantity;
+                    totalAmount += itemTotal;
+                }
+
+                // Set total amount for order
+                newOrder.TotalAmount = totalAmount;
+            }
+            else
+            {
+                // If no items were provided, set total to 0
+                newOrder.TotalAmount = 0;
+            }
+
+            await _unitOfWork.Orders.AddAsync(newOrder);
+            await _unitOfWork.SaveAsync();
+
+            OrderResponseDto orderResponse = _mapper.Map<OrderResponseDto>(newOrder);
+            return orderResponse;
         }
 
         public async Task<ICollection<Order>> GetAllAsync()

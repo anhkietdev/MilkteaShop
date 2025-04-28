@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ProductController : BaseController
     {
         private readonly IProductService _productService;
+
         public ProductController(IProductService productService)
         {
             _productService = productService;
@@ -19,37 +22,39 @@ namespace Presentation.Controllers
             return Ok(products);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
         {
             var product = await _productService.GetByIdAsync(id);
+            if (product == null)
+                return NotFound();
+
             return Ok(product);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ProductDto productDto)
+        public async Task<IActionResult> Create(ProductDto productDto)
         {
             await _productService.CreateAsync(productDto);
             return Ok();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] ProductDto productDto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, ProductDto productDto)
         {
-            await _productService.UpdateAsync(id, productDto);
-            return Ok();
+             await _productService.UpdateAsync(id, productDto);
+
+            return NoContent(); // 204 if updated successfully
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _productService.DeleteAsync(id);
             if (!result)
-            {
                 return NotFound();
-            }
-            return Ok();
-        }
 
+            return NoContent(); // 204 if deleted successfully
+        }
     }
 }
