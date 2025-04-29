@@ -10,6 +10,8 @@
         public ICategoryExtraMappingRepository CategoryExtraMappings { get; }
         public IOrderItemRepository OrderItems { get; }
         public IProductSizeRepository ProductSizes { get; }
+        public IStoreRepository Stores { get; }
+
         Task SaveAsync();
     }
 }

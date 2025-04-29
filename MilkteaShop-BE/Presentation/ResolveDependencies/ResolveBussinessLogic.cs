@@ -1,4 +1,4 @@
-﻿using BAL;
+using BAL;
 using BAL.Services.Implement;
 using BAL.Services.Interface;
 using DAL.Context;
@@ -21,8 +21,10 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IComboItemService, ComboItemService>();
             services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IProductSizeService, ProductSizeService>();
-            services.AddScoped<IOrderItemService, OrderItemService>();
+            services.AddScoped<IStoreService, StoreService>();
+
+
+
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -32,6 +34,7 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<ICategoryExtraMappingRepository, CategoryExtraMappingRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
 
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString, sqlOptions => {
                 sqlOptions.CommandTimeout(30);
