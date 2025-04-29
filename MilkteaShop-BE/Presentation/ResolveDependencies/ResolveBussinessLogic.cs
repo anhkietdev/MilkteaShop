@@ -21,8 +21,8 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IComboItemService, ComboItemService>();
             services.AddScoped<IOrderService, OrderService>();
-
-
+            services.AddScoped<IProductSizeService, ProductSizeService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
