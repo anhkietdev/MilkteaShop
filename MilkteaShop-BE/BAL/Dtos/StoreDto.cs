@@ -10,12 +10,16 @@ namespace BAL.Dtos
     public class StoreDto
     {
 
+        public string StoreName { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Address { get; set; }
+        public string? PhoneNumber { get; set; }
 
-            public Guid Id { get; set; } // Từ BaseEntity
-            public string StoreName { get; set; } = string.Empty;
-            public Guid UserId { get; set; }
-            public Guid OrderId { get; set; }
-        
+
+        // Optionally, you can include IDs or minimal info about Users and Orders,
+        // but usually DTOs keep it simple unless you need nested data.
+        public List<int>? UserIds { get; set; }
+        public List<int>? OrderIds { get; set; }
 
 
     }

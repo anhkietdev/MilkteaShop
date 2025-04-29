@@ -60,10 +60,13 @@ namespace BAL.Services.Implement
                 }
                 _mapper.Map(storeDto, store);
 
-                store.StoreName = storeDto.StoreName;
-         
+            store.StoreName = storeDto.StoreName;
+            store.Description = storeDto.Description;
+            store.Address = storeDto.Address;
+            store.PhoneNumber = storeDto.PhoneNumber;
 
-                await _unitOfWork.Stores.UpdateAsync(store);
+
+            await _unitOfWork.Stores.UpdateAsync(store);
                 await _unitOfWork.SaveAsync();
             }
 
