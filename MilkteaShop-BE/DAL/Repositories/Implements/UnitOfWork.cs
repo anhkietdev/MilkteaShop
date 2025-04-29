@@ -21,6 +21,7 @@ namespace DAL.Repositories.Implements
 
         public IOrderItemRepository OrderItems { get; private set; }
         public IProductSizeRepository ProductSizes { get; private set; }
+        public IStoreRepository Stores { get; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -33,6 +34,8 @@ namespace DAL.Repositories.Implements
             CategoryExtraMappings = new CategoryExtraMappingRepository(_context);
             OrderItems = new OrderItemRepository(_context);
             ProductSizes = new ProductSizeRepository(_context);
+            Stores = new StoreRepository(_context);
+
         }
 
         public async Task SaveAsync()

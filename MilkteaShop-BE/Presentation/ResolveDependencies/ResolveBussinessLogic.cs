@@ -21,6 +21,8 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IComboItemService, ComboItemService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IStoreService, StoreService>();
+
 
 
 
@@ -32,6 +34,7 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<ICategoryExtraMappingRepository, CategoryExtraMappingRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
 
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString, sqlOptions => {
                 sqlOptions.CommandTimeout(30);
