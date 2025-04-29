@@ -55,7 +55,8 @@ namespace BAL.Services.Implement
 
             category.CategoryName = categoryDto.CategoryName;
             category.Description = categoryDto.Description;
-            
+            category.Products = categoryDto.Products;
+
             await _unitOfWork.Categories.UpdateAsync(category);
             await _unitOfWork.SaveAsync();
         }
