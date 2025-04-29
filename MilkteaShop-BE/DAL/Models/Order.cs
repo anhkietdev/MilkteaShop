@@ -9,6 +9,8 @@
         public PaymentMethod PaymentMethod { get; set; }
         public Guid UserId { get; set; }
         public required virtual User User { get; set; }
+        public Guid? StoreId { get; set; }
+        public required virtual Store Store { get; set; }
         public static string GenerateOrderNumber()
         {
             var random = new Random();
