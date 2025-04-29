@@ -1,4 +1,6 @@
-﻿namespace BAL.Dtos
+﻿using DAL.Models;
+
+namespace BAL.Dtos
 {
-    public record RegisterDto(string Username, string Password, string PhoneNumber);
+    public record RegisterDto(string Username, string Password, string PhoneNumber, Store Store);
 }

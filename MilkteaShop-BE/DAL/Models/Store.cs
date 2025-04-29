@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DAL.Models
 {
     public class Store : BaseEntity
     {
-        public required string StoreName { get; set; }
-
-        // Mối quan hệ với User
-        public Guid UserId { get; set; }
-        public required virtual User User { get; set; }
-
-        // Mối quan hệ với Order
-        public Guid OrderId { get; set; }
-        public required virtual Order Order { get; set; }
+        public string StoreName { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Address { get; set; }
+        public string? PhoneNumber { get; set; }
+        public ICollection<User>? Users { get; set; } = new List<User>();
+        public ICollection<Order>? Orders { get; set; } = new List<Order>();
     }
-
 }

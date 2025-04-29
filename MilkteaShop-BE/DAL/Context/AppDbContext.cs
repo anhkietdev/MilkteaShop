@@ -14,6 +14,7 @@ namespace DAL.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Store> Stores { get; set; } 
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -23,6 +24,25 @@ namespace DAL.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Store Relationships
+            modelBuilder.Entity<Store>(entity =>
+            {
+                // Store - Users (One-to-Many)
+                entity.HasMany(s => s.Users)
+                      .WithOne(u => u.Store)
+                      .HasForeignKey(u => u.StoreId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                // Store - Orders (One-to-Many)
+                entity.HasMany(s => s.Orders)
+                      .WithOne(o => o.Store)
+                      .HasForeignKey(o => o.StoreId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
 
             // Category Relationships
             modelBuilder.Entity<Category>(entity =>
@@ -87,6 +107,12 @@ namespace DAL.Context
                       .HasForeignKey(oi => oi.OrderId)
                       .OnDelete(DeleteBehavior.Cascade);
 
+                // Order - Store (Many-to-One)
+                entity.HasOne(o => o.Store)
+                      .WithMany(s => s.Orders)
+                      .HasForeignKey(o => o.StoreId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
                 // Soft Delete Filter
                 entity.HasQueryFilter(e => e.DeletedAt == null);
             });
@@ -107,9 +133,19 @@ namespace DAL.Context
                 // Soft Delete Filter
                 entity.HasQueryFilter(e => e.DeletedAt == null);
             });
-        }
 
+            // User Relationships
+            modelBuilder.Entity<User>(entity =>
+            {
+                // User - Store (Many-to-One)
+                entity.HasOne(u => u.Store)
+                      .WithMany(s => s.Users)
+                      .HasForeignKey(u => u.StoreId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                // Soft Delete Filter
+                entity.HasQueryFilter(e => e.DeletedAt == null);
+            });
+        }
     }
-    
-    
 }

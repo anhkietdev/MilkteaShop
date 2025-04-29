@@ -74,6 +74,7 @@ namespace BAL.Services.Implement
                 Username = registerDto.Username,
                 PasswordHash = registerDto.Password,
                 PhoneNumber = registerDto.PhoneNumber,
+                Store = registerDto.Store,
             };
 
             var result = _unitOfWork.Users.AddAsync(newUser);
