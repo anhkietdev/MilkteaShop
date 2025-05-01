@@ -21,7 +21,7 @@ namespace Presentation.Controllers
         {
             try
             {
-                var productSizes = await _productSizeService.GetAllProductSizesAsync();
+                var productSizes = await _productSizeService.GetAllProductSizesSimpleAsync();
                 return Ok(productSizes);
             }
             catch (Exception ex)

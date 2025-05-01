@@ -46,6 +46,21 @@ namespace BAL.Services.Implement
             return _mapper.Map<ICollection<ProductSizeResponseDto>>(productSizes);
         }
 
+        public async Task<IEnumerable<object>> GetAllProductSizesSimpleAsync()
+        {
+            var productSizes = await _unitOfWork.ProductSizes.GetAllAsync();
+
+            var simplifiedData = productSizes.Select(p => new
+            {
+                p.Id,
+                p.ProductId,
+                Size = p.Size,
+                p.Price
+            }).ToList();
+
+            return simplifiedData;
+        }
+
         public async Task<ProductSize> GetProductSizeByIdAsync(Guid id)
         {
             ProductSize? productSize = await _unitOfWork.ProductSizes.GetAsync(p => p.Id == id);
