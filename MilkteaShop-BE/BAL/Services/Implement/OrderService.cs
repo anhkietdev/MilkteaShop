@@ -76,7 +76,8 @@ namespace BAL.Services.Implement
 
         public async Task<ICollection<Order>> GetAllAsync()
         {
-            ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync();
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync(null,includeProperties);
             if (orders == null)
             {
                 throw new Exception("No order found");
@@ -84,15 +85,16 @@ namespace BAL.Services.Implement
             return orders;
         }
 
-        public async Task<Order> GetOrderByIdAsync(Guid id)
+        public async Task<OrderResponseDto> GetOrderByIdAsync(Guid id)
         {
             string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
-            Order? order = await _unitOfWork.Orders.GetAsync(c => c.Id == id, includeProperties);
+            Order? order = await _unitOfWork.Orders.GetAsync(o => o.Id == id, includeProperties);
             if (order == null)
             {
-                throw new Exception("order not found");
+                throw new Exception("Order not found");
             }
-            return order;
+            OrderResponseDto orderResponse = _mapper.Map<OrderResponseDto>(order);
+            return orderResponse;
         }
     }
 }

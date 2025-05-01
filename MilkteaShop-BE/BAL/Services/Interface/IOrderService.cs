@@ -7,6 +7,6 @@ namespace BAL.Services.Interface
     {
         Task<OrderResponseDto> CreateOrderAsync(OrderRequestDto order);
         Task<ICollection<Order>> GetAllAsync();
-        Task<Order> GetOrderByIdAsync(Guid id);
+        Task<OrderResponseDto> GetOrderByIdAsync(Guid id);
     }
 }
