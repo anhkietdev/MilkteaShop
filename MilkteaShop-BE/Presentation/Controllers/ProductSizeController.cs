@@ -19,8 +19,16 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var productSizes = await _productSizeService.GetAllProductSizesAsync();
-            return Ok(productSizes);
+            try
+            {
+                var productSizes = await _productSizeService.GetAllProductSizesAsync();
+                return Ok(productSizes);
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
