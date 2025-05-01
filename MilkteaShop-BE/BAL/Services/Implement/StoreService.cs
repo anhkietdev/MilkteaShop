@@ -2,7 +2,7 @@
 using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
-using DAL.Repositories.Implements;
+using DAL.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
