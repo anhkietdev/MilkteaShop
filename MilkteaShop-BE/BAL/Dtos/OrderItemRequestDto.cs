@@ -10,6 +10,6 @@ namespace BAL.Dtos
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public Guid? ParentOrderItemId { get; set; }
-        public virtual ICollection<OrderItem> ToppingItems { get; set; } = new List<OrderItem>();
+        public virtual ICollection<OrderItem>? ToppingItems { get; set; } 
     }
 }

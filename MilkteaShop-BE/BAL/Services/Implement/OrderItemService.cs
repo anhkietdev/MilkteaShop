@@ -22,6 +22,14 @@ namespace BAL.Services.Implement
         public async Task CreateOrderItemAsync(OrderItemRequestDto orderItemDto)
         {
             OrderItem orderItem = _mapper.Map<OrderItem>(orderItemDto);
+            if(orderItem.ToppingItems != null)
+            {
+                foreach (var toppingItem in orderItem.ToppingItems)
+                {
+                    var totalToppingPrice = toppingItem.Price * toppingItem.Quantity;
+                    orderItem.Price += totalToppingPrice;
+                }
+            }            
             await _unitOfWork.OrderItems.AddAsync(orderItem);
             await _unitOfWork.SaveAsync();
         }
