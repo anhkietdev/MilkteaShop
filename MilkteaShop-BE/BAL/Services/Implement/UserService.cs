@@ -126,6 +126,9 @@ namespace BAL.Services.Implement
             user.Email = userDto.Email;
             user.PhoneNumber = userDto.PhoneNumber;
             user.ImageUrl = userDto.ImageUrl;
+            user.IsActive = userDto.IsActive;
+            user.UpdatedAt = userDto.UpdatedAt;
+            user.CreatedAt = userDto.CreatedAt;
 
             // Safe parsing of Role from string
             if (Enum.TryParse<Role>(userDto.Role, true, out var role)) // true => case-insensitive
