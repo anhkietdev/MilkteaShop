@@ -60,9 +60,9 @@ namespace BAL.Services.Implement
             }
             _mapper.Map(orderItemDto, orderItem);
 
-            //orderItem.Quantity = orderItemDto.Quantity;
-            //orderItem.ProductId = orderItemDto.ProductId;
-            //orderItem.OrderId = orderItemDto.OrderId;
+            orderItem.Quantity = orderItemDto.Quantity;
+            orderItem.ProductSizeId = orderItemDto.ProductSizeId;
+            orderItem.OrderId = orderItemDto.OrderId;
 
             await _unitOfWork.OrderItems.UpdateAsync(orderItem);
             await _unitOfWork.SaveAsync();
