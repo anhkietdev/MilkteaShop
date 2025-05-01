@@ -22,8 +22,14 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IComboItemService, ComboItemService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IStoreService, StoreService>();
+<<<<<<< Updated upstream
             services.AddScoped<IOrderItemService, OrderItemService>();
             services.AddScoped<IProductSizeService, ProductSizeService>();            
+=======
+            services.AddScoped<ICategoryExtraMappingService, CategoryExtraMappingService>();
+
+
+>>>>>>> Stashed changes
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();

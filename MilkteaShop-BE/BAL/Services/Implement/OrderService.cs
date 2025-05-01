@@ -2,7 +2,7 @@
 using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
-using DAL.Repositories.Interfaces;
+using DAL.Repositories.Implements;
 
 namespace BAL.Services.Implement
 {

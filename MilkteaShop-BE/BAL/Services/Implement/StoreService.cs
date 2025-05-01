@@ -2,7 +2,7 @@
 using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
-using DAL.Repositories.Interfaces;
+using DAL.Repositories.Implements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +12,8 @@ using static BAL.Services.Implement.StoreService;
 
 namespace BAL.Services.Implement
 {
- 
-        public class StoreService : IStoreService
+
+    public class StoreService : IStoreService
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;

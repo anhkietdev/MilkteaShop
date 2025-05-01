@@ -1,4 +1,6 @@
-﻿namespace DAL.Repositories.Interfaces
+﻿using DAL.Repositories.Interfaces;
+
+namespace DAL.Repositories.Implements
 {
     public interface IUnitOfWork
     {
