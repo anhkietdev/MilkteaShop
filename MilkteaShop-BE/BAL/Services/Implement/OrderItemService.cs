@@ -29,7 +29,9 @@ namespace BAL.Services.Implement
                     var totalToppingPrice = toppingItem.Price * toppingItem.Quantity;
                     orderItem.Price += totalToppingPrice;
                 }
-            }            
+            }
+            orderItem.Price = orderItem.ProductSize.Price * orderItem.Quantity;
+
             await _unitOfWork.OrderItems.AddAsync(orderItem);
             await _unitOfWork.SaveAsync();
         }

@@ -86,7 +86,8 @@ namespace BAL.Services.Implement
 
         public async Task<Order> GetOrderByIdAsync(Guid id)
         {
-            Order? order = await _unitOfWork.Orders.GetAsync(c => c.Id == id);
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            Order? order = await _unitOfWork.Orders.GetAsync(c => c.Id == id, includeProperties);
             if (order == null)
             {
                 throw new Exception("order not found");
