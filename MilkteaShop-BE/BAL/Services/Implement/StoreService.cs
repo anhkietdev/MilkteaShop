@@ -12,8 +12,8 @@ using static BAL.Services.Implement.StoreService;
 
 namespace BAL.Services.Implement
 {
- 
-        public class StoreService : IStoreService
+
+    public class StoreService : IStoreService
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;

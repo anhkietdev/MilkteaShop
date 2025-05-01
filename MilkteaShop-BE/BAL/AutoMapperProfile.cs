@@ -16,7 +16,11 @@ namespace BAL
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<Store, StoreDto>().ReverseMap();
 
+            CreateMap<CategoryExtraMapping, CategoryExtraMappingDto>().ReverseMap();
+
+
             CreateMap<Order, OrderRequestDto>().ReverseMap();
+
             CreateMap<Order, OrderResponseDto>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
                 .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.StoreId))
