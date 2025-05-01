@@ -1,4 +1,4 @@
-﻿using BAL;
+using BAL;
 using BAL.Services.Implement;
 using BAL.Services.Interface;
 using DAL.Context;
@@ -22,9 +22,8 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IComboItemService, ComboItemService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IStoreService, StoreService>();
-
-
-
+            services.AddScoped<IOrderItemService, OrderItemService>();
+            services.AddScoped<IProductSizeService, ProductSizeService>();            
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();

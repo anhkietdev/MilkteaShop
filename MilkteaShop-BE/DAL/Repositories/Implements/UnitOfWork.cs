@@ -20,7 +20,7 @@ namespace DAL.Repositories.Implements
         public ICategoryExtraMappingRepository CategoryExtraMappings { get; private set; }
 
         public IOrderItemRepository OrderItems { get; private set; }
-        public IProductSizeRepository ProductSizes { get; private set; }
+        public IProductSizeRepository ProductSize { get; private set; }
         public IStoreRepository Stores { get; }
 
         public UnitOfWork(AppDbContext context)
@@ -33,7 +33,7 @@ namespace DAL.Repositories.Implements
             ComboItems = new ComboItemRepository(_context);
             CategoryExtraMappings = new CategoryExtraMappingRepository(_context);
             OrderItems = new OrderItemRepository(_context);
-            ProductSizes = new ProductSizeRepository(_context);
+            ProductSize = new ProductSizeRepository(_context);
             Stores = new StoreRepository(_context);
 
         }

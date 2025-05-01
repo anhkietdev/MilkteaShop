@@ -9,7 +9,7 @@
         public IComboItemRepository ComboItems { get; }
         public ICategoryExtraMappingRepository CategoryExtraMappings { get; }
         public IOrderItemRepository OrderItems { get; }
-        public IProductSizeRepository ProductSizes { get; }
+        public IProductSizeRepository ProductSize { get; }
         public IStoreRepository Stores { get; }
 
         Task SaveAsync();
