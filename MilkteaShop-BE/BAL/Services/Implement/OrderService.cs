@@ -84,15 +84,16 @@ namespace BAL.Services.Implement
             return orders;
         }
 
-        public async Task<Order> GetOrderByIdAsync(Guid id)
+        public async Task<OrderResponseDto> GetOrderByIdAsync(Guid id)
         {
             string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
-            Order? order = await _unitOfWork.Orders.GetAsync(c => c.Id == id, includeProperties);
+            Order? order = await _unitOfWork.Orders.GetAsync(o => o.Id == id, includeProperties);
             if (order == null)
             {
-                throw new Exception("order not found");
+                throw new Exception("Order not found");
             }
-            return order;
+            OrderResponseDto orderResponse = _mapper.Map<OrderResponseDto>(order);
+            return orderResponse;
         }
     }
 }
