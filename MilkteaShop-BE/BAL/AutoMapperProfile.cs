@@ -32,6 +32,26 @@ namespace BAL
                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
             CreateMap<ProductSize, ProductSizeRequestDto>().ReverseMap();
+            CreateMap<OrderItem, OrderItemRequestDto>()
+                .ForMember(dest => dest.ProductSizeId, opt => opt.MapFrom(src => src.ProductSizeId))
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.ToppingItems, opt => opt.MapFrom(src => src.ToppingItems))
+                .ForMember(dest => dest.ParentOrderItemId, opt => opt.MapFrom(src => src.ParentOrderItemId))
+                .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId))                
+                .ReverseMap();
+            CreateMap<OrderItem, OrderItemResponseDto>()
+                .ForMember(dest => dest.ProductSize, opt => opt.MapFrom(src => src.ProductSize))
+                .ForMember(dest => dest.ToppingItems, opt => opt.MapFrom(src => src.ToppingItems))
+                .ForMember(dest => dest.ParentOrderItem, opt => opt.MapFrom(src => src.ParentOrderItem))
+                .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId))
+                .ForMember(dest => dest.ProductSizeId, opt => opt.MapFrom(src => src.ProductSizeId))
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.ParentOrderItemId, opt => opt.MapFrom(src => src.ParentOrderItemId))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ReverseMap();
 
         }
     }

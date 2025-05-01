@@ -33,7 +33,6 @@ namespace BAL.Services.Implement
 
                 foreach (var itemDto in orderRequest.OrderItems)
                 {
-                    // Check if product exists
                     var product = await _unitOfWork.ProductSize.GetAsync(p => p.Id == itemDto.ProductSizeId);
                     if (product == null)
                     {
@@ -50,26 +49,21 @@ namespace BAL.Services.Implement
                         Order = newOrder,
                     };
 
-                    // Handle parent-child relationships for toppings
                     if (itemDto.ParentOrderItemId.HasValue)
                     {
                         orderItem.ParentOrderItemId = itemDto.ParentOrderItemId;
                     }
 
-                    // Add to order items collection
                     newOrder.OrderItems.Add(orderItem);
 
-                    // Calculate item total and add to order total
                     decimal itemTotal = orderItem.Price * orderItem.Quantity;
                     totalAmount += itemTotal;
                 }
 
-                // Set total amount for order
                 newOrder.TotalAmount = totalAmount;
             }
             else
             {
-                // If no items were provided, set total to 0
                 newOrder.TotalAmount = 0;
             }
 
@@ -92,7 +86,8 @@ namespace BAL.Services.Implement
 
         public async Task<Order> GetOrderByIdAsync(Guid id)
         {
-            Order? order = await _unitOfWork.Orders.GetAsync(c => c.Id == id);
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            Order? order = await _unitOfWork.Orders.GetAsync(c => c.Id == id, includeProperties);
             if (order == null)
             {
                 throw new Exception("order not found");
