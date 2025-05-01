@@ -74,7 +74,7 @@ namespace BAL.Services.Implement
             return orderResponse;
         }
 
-        public async Task<ICollection<Order>> GetAllAsync()
+        public async Task<ICollection<OrderResponseDto>> GetAllAsync()
         {
             string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
             ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync(null,includeProperties);
@@ -82,7 +82,8 @@ namespace BAL.Services.Implement
             {
                 throw new Exception("No order found");
             }
-            return orders;
+
+            return _mapper.Map<ICollection<OrderResponseDto>>(orders);
         }
 
         public async Task<OrderResponseDto> GetOrderByIdAsync(Guid id)
