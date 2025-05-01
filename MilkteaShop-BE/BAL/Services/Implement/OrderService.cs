@@ -34,7 +34,7 @@ namespace BAL.Services.Implement
                 foreach (var itemDto in orderRequest.OrderItems)
                 {
                     // Check if product exists
-                    var product = await _unitOfWork.ProductSizes.GetAsync(p => p.Id == itemDto.ProductSizeId);
+                    var product = await _unitOfWork.ProductSize.GetAsync(p => p.Id == itemDto.ProductSizeId);
                     if (product == null)
                     {
                         throw new ArgumentException($"Product with ID {itemDto.ProductSizeId} not found.");

@@ -23,7 +23,7 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<IOrderItemService, OrderItemService>();
-            services.AddScoped<IProductSizeService, ProductSizeService>();
+            services.AddScoped<IProductSizeService, ProductSizeService>();            
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();

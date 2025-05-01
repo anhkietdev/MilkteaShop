@@ -20,25 +20,25 @@ namespace BAL.Services.Implement
         public async Task CreateProductSizeAsync(ProductSizeRequestDto productSizeDto)
         {
             ProductSize productSize = _mapper.Map<ProductSize>(productSizeDto);
-            await _unitOfWork.ProductSizes.AddAsync(productSize);
+            await _unitOfWork.ProductSize.AddAsync(productSize);
             await _unitOfWork.SaveAsync();
         }
 
         public async Task<bool> DeleteProductSizeAsync(Guid id)
         {
-            ProductSize? productSize = await _unitOfWork.ProductSizes.GetAsync(p => p.Id == id);
+            ProductSize? productSize = await _unitOfWork.ProductSize.GetAsync(p => p.Id == id);
             if (productSize == null)
             {
                 return false;
             }
-            await _unitOfWork.ProductSizes.RemoveAsync(productSize);
+            await _unitOfWork.ProductSize.RemoveAsync(productSize);
             await _unitOfWork.SaveAsync();
             return true;
         }
 
         public async Task<ICollection<ProductSizeResponseDto>> GetAllProductSizesAsync()
         {
-            ICollection<ProductSize> productSizes = await _unitOfWork.ProductSizes.GetAllAsync();
+            ICollection<ProductSize> productSizes = await _unitOfWork.ProductSize.GetAllAsync();
             if (productSizes == null || !productSizes.Any())
             {
                 throw new Exception("No product sizes found");
@@ -48,7 +48,7 @@ namespace BAL.Services.Implement
 
         public async Task<IEnumerable<object>> GetAllProductSizesSimpleAsync()
         {
-            var productSizes = await _unitOfWork.ProductSizes.GetAllAsync();
+            var productSizes = await _unitOfWork.ProductSize.GetAllAsync();
 
             var simplifiedData = productSizes.Select(p => new
             {
@@ -63,7 +63,7 @@ namespace BAL.Services.Implement
 
         public async Task<ProductSize> GetProductSizeByIdAsync(Guid id)
         {
-            ProductSize? productSize = await _unitOfWork.ProductSizes.GetAsync(p => p.Id == id);
+            ProductSize? productSize = await _unitOfWork.ProductSize.GetAsync(p => p.Id == id);
             if (productSize == null)
             {
                 throw new Exception("Product size not found");
@@ -73,7 +73,7 @@ namespace BAL.Services.Implement
 
         public async Task UpdateProductSizeAsync(Guid id, ProductSizeRequestDto productSizeDto)
         {
-            ProductSize? productSize = await _unitOfWork.ProductSizes.GetAsync(p => p.Id == id);
+            ProductSize? productSize = await _unitOfWork.ProductSize.GetAsync(p => p.Id == id);
             if (productSize == null)
             {
                 throw new Exception("Product size not found");
@@ -84,7 +84,7 @@ namespace BAL.Services.Implement
             productSize.Price = productSizeDto.Price;
             productSize.ProductId = productSizeDto.ProductId;
 
-            await _unitOfWork.ProductSizes.UpdateAsync(productSize);
+            await _unitOfWork.ProductSize.UpdateAsync(productSize);
             await _unitOfWork.SaveAsync();
         }
     }

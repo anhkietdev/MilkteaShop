@@ -15,7 +15,7 @@ namespace DAL.Context
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Store> Stores { get; set; } 
-        public DbSet<ProductSize> ProductSizes { get; set; }
+        public DbSet<ProductSize> ProductSize { get; set; }
         #endregion
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
