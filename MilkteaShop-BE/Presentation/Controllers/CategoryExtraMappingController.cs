@@ -20,9 +20,18 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var categoryExtraMappings = await _categoryExtraMappingService.GetAllCategoryExtraMappingAsync();
-            return Ok(categoryExtraMappings);
+            try
+            {
+                var categoryExtraMappings = await _categoryExtraMappingService.GetAllCategoryExtraMappingAsync();
+                return Ok(categoryExtraMappings);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
+
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
