@@ -29,6 +29,7 @@ namespace BAL
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
+            CreateMap<ProductSize, ProductSizeRequestDto>().ReverseMap();
 
         }
     }
