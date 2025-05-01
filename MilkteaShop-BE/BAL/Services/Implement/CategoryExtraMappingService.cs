@@ -21,7 +21,7 @@ namespace BAL.Services.Implement
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
+        //GetAll
         public async Task<ICollection<CategoryExtraMapping>> GetAllCategoryExtraMappingAsync()
         {
             ICollection<CategoryExtraMapping> categoryExtraMappings = await _unitOfWork.CategoryExtraMappings.GetAllAsync();
