@@ -5,7 +5,7 @@ namespace BAL.Services.Interface
 {
     public interface IProductSizeService
     {
-        Task<ICollection<ProductSize>> GetAllProductSizesAsync();
+        Task<ICollection<ProductSizeResponseDto>> GetAllProductSizesAsync();
         Task<ProductSize> GetProductSizeByIdAsync(Guid id);
         Task CreateProductSizeAsync(ProductSizeRequestDto productSizeDto);
         Task UpdateProductSizeAsync(Guid id, ProductSizeRequestDto productSizeDto);

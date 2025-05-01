@@ -36,14 +36,14 @@ namespace BAL.Services.Implement
             return true;
         }
 
-        public async Task<ICollection<ProductSize>> GetAllProductSizesAsync()
+        public async Task<ICollection<ProductSizeResponseDto>> GetAllProductSizesAsync()
         {
             ICollection<ProductSize> productSizes = await _unitOfWork.ProductSizes.GetAllAsync();
-            if (productSizes == null)
+            if (productSizes == null || !productSizes.Any())
             {
                 throw new Exception("No product sizes found");
             }
-            return productSizes;
+            return _mapper.Map<ICollection<ProductSizeResponseDto>>(productSizes);
         }
 
         public async Task<ProductSize> GetProductSizeByIdAsync(Guid id)
