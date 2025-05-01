@@ -31,7 +31,7 @@ namespace BAL.Services.Implement
             }
             return categoryExtraMappings;
         }
-
+        //GetById
         public async Task<CategoryExtraMapping> GetCategoryExtraMappingByIdAsync(Guid id)
         {
             CategoryExtraMapping? categoryExtraMappings = await _unitOfWork.CategoryExtraMappings.GetAsync(c => c.Id == id);
