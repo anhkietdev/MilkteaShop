@@ -76,7 +76,8 @@ namespace BAL.Services.Implement
 
         public async Task<ICollection<Order>> GetAllAsync()
         {
-            ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync();
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync(null,includeProperties);
             if (orders == null)
             {
                 throw new Exception("No order found");
