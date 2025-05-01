@@ -16,7 +16,7 @@ namespace BAL.Services.Implement
         public UserService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper)
         {
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;  
             _configuration = configuration;
         }
 
