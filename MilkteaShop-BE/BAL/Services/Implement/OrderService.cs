@@ -121,7 +121,6 @@ namespace BAL.Services.Implement
             existingOrder.TotalAmount = order.TotalAmount;
             existingOrder.Description = order.Description;
             existingOrder.PaymentMethod = order.PaymentMethod;
-            existingOrder.
 
             // Handle order items if they exist in the request
             if (order.OrderItems != null && order.OrderItems.Any())
