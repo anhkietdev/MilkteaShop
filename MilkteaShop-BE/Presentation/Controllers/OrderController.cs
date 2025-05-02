@@ -40,5 +40,26 @@ namespace Presentation.Controllers
             return Ok(orderService);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] OrderRequestDto orderDto)
+        {
+            var result = await _orderService.UpdateOrderAsync(id, orderDto);
+            if (result is null)
+            {
+                return BadRequest(new { message = "Order update failed" });
+            }
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var result = await _orderService.DeleteOrderAsync(id);
+            if (!result)
+            {
+                return BadRequest(new { message = "Order deletion failed" });
+            }
+            return Ok(new { message = "Order deleted successfully" });
+        }
     }
 }
