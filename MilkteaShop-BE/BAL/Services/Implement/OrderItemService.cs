@@ -32,11 +32,11 @@ namespace BAL.Services.Implement
             var basePrice = productSize.Price * orderItemDto.Quantity;
             
             decimal toppingTotal = 0;
-            if (orderItem.ToppingItems != null)
+            if (orderItem.Toppings != null)
             {
-                foreach (var topping in orderItem.ToppingItems)
+                foreach (var topping in orderItem.Toppings)
                 {
-                    toppingTotal += topping.Price * topping.Quantity;
+                    toppingTotal += topping.ProductSize.Price;
                 }
             }
            

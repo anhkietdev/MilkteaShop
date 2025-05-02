@@ -49,11 +49,6 @@ namespace BAL.Services.Implement
                         Order = newOrder,
                     };
 
-                    if (itemDto.ParentOrderItemId.HasValue)
-                    {
-                        orderItem.ParentOrderItemId = itemDto.ParentOrderItemId;
-                    }
-
                     newOrder.OrderItems.Add(orderItem);
 
                     decimal itemTotal = orderItem.Price * orderItem.Quantity;
@@ -142,10 +137,7 @@ namespace BAL.Services.Implement
                         Description = itemDto.Description,
                         Order = existingOrder,
                     };
-                    if (itemDto.ParentOrderItemId.HasValue)
-                    {
-                        orderItem.ParentOrderItemId = itemDto.ParentOrderItemId;
-                    }
+
                     existingOrder.OrderItems.Add(orderItem);
                 }
             }
