@@ -55,7 +55,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.CategoryExtraMapping", b =>
@@ -99,7 +99,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("MainCategoryId");
 
-                    b.ToTable("CategoryExtraMappings");
+                    b.ToTable("CategoryExtraMappings", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.ComboItem", b =>
@@ -143,7 +143,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductSizeId");
 
-                    b.ToTable("ComboItems");
+                    b.ToTable("ComboItems", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Order", b =>
@@ -195,7 +195,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.OrderItem", b =>
@@ -243,7 +243,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductSizeId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.OrderItemTopping", b =>
@@ -279,7 +279,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductSizeId");
 
-                    b.ToTable("OrderItemToppings");
+                    b.ToTable("OrderItemToppings", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Product", b =>
@@ -326,7 +326,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.ProductSize", b =>
@@ -366,7 +366,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSize");
+                    b.ToTable("ProductSize", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Store", b =>
@@ -408,7 +408,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stores");
+                    b.ToTable("Stores", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
@@ -466,7 +466,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.CategoryExtraMapping", b =>
