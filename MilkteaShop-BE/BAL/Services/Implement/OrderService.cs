@@ -83,7 +83,7 @@ namespace BAL.Services.Implement
 
         public async Task<ICollection<OrderResponseDto>> GetAllAsync()
         {
-            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings";
             ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync(null,includeProperties);
             if (orders == null)
             {
@@ -95,7 +95,7 @@ namespace BAL.Services.Implement
 
         public async Task<OrderResponseDto> GetOrderByIdAsync(Guid id)
         {
-            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings";
             Order? order = await _unitOfWork.Orders.GetAsync(o => o.Id == id, includeProperties);
             if (order == null)
             {
