@@ -2,12 +2,9 @@
 {
     public class ComboItemDto
     {
-        public Guid Id { get; set; }
-        public string ComboCode { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public Guid ProductId { get; set; }
-        public string ProductName { get; set; } = string.Empty;
-        public decimal Price { get; set; }  // Added price
-        public int Quantity { get; set; }
+        public string ComboCode { get; set; } // Required field
+        public string? Description { get; set; } // Optional field
+        public Guid ProductSizeId { get; set; } // The Product Size ID
+        public int Quantity { get; set; } // The quantity of the item
     }
 }
