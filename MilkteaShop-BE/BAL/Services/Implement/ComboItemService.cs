@@ -58,9 +58,9 @@ namespace BAL.Services.Implement
             }
             _mapper.Map(comboItemDto, comboItem);
 
-            comboItem.ProductSizeId = comboItemDto.ProductId;
+            comboItem.ProductSizeId = comboItemDto.ProductSizeId;
             comboItem.Description = comboItemDto.Description;
-            comboItem.ProductSize.Product.ProductName = comboItemDto.ProductName;
+            comboItem.ComboCode = comboItemDto.ComboCode;
             comboItem.Quantity = comboItemDto.Quantity;
             await _unitOfWork.ComboItems.UpdateAsync(comboItem); 
 
