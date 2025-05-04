@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250502072319_updateOrderItemTable")]
+    partial class updateOrderItemTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DAL.Models.CategoryExtraMapping", b =>
@@ -99,7 +102,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("MainCategoryId");
 
-                    b.ToTable("CategoryExtraMappings", (string)null);
+                    b.ToTable("CategoryExtraMappings");
                 });
 
             modelBuilder.Entity("DAL.Models.ComboItem", b =>
@@ -143,7 +146,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductSizeId");
 
-                    b.ToTable("ComboItems", (string)null);
+                    b.ToTable("ComboItems");
                 });
 
             modelBuilder.Entity("DAL.Models.Order", b =>
@@ -195,7 +198,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("DAL.Models.OrderItem", b =>
@@ -243,7 +246,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductSizeId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("DAL.Models.OrderItemTopping", b =>
@@ -279,7 +282,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductSizeId");
 
-                    b.ToTable("OrderItemToppings", (string)null);
+                    b.ToTable("OrderItemToppings");
                 });
 
             modelBuilder.Entity("DAL.Models.Product", b =>
@@ -326,7 +329,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("DAL.Models.ProductSize", b =>
@@ -366,7 +369,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSize", (string)null);
+                    b.ToTable("ProductSize");
                 });
 
             modelBuilder.Entity("DAL.Models.Store", b =>
@@ -408,7 +411,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stores", (string)null);
+                    b.ToTable("Stores");
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
@@ -466,7 +469,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DAL.Models.CategoryExtraMapping", b =>

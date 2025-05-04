@@ -20,40 +20,56 @@ namespace BAL.Services.Implement
         }
 
         public async Task CreateOrderItemAsync(OrderItemRequestDto orderItemDto)
-        {            
-            var orderItem = _mapper.Map<OrderItem>(orderItemDto);
-            
-            var productSize = await _unitOfWork.ProductSize.GetAsync(ps => ps.Id == orderItemDto.ProductSizeId);
-            if (productSize == null)
-            {
-                throw new Exception("ProductSize not found");
-            }
-            
-            var basePrice = productSize.Price * orderItemDto.Quantity;
-            
-            decimal toppingTotal = 0;
-            if (orderItem.ToppingItems != null)
-            {
-                foreach (var topping in orderItem.ToppingItems)
-                {
-                    toppingTotal += topping.Price * topping.Quantity;
-                }
-            }
-           
-            orderItem.Price = basePrice + toppingTotal;
-            
+        {
             var order = await _unitOfWork.Orders.GetAsync(o => o.Id == orderItemDto.OrderId);
             if (order == null)
-            {
                 throw new Exception("Order not found");
+
+            var productSize = await _unitOfWork.ProductSize.GetAsync(ps => ps.Id == orderItemDto.ProductSizeId);
+            if (productSize == null)
+                throw new Exception("ProductSize not found");
+
+            var orderItem = new OrderItem
+            {
+                Id = Guid.NewGuid(),
+                OrderId = orderItemDto.OrderId,
+                ProductSizeId = orderItemDto.ProductSizeId,
+                Quantity = orderItemDto.Quantity,
+                Description = orderItemDto.Description,
+                Toppings = new List<OrderItemTopping>()
+            };
+
+            decimal basePrice = productSize.Price * orderItemDto.Quantity;
+
+            decimal toppingTotal = 0;
+            if (orderItemDto.ToppingItems != null && orderItemDto.ToppingItems.Any())
+            {
+                foreach (var toppingId in orderItemDto.ToppingItems)
+                {
+                    var toppingProductSize = await _unitOfWork.ProductSize.GetAsync(ps => ps.Id == toppingId);
+                    if (toppingProductSize == null)
+                        throw new Exception($"Topping ProductSize not found: {toppingId}");
+
+                    toppingTotal += toppingProductSize.Price;
+
+                    orderItem.Toppings.Add(new OrderItemTopping
+                    {
+                        Id = Guid.NewGuid(),
+                        OrderItemId = orderItem.Id,
+                        ProductSizeId = toppingProductSize.Id
+                    });
+                }
             }
 
+            orderItem.Price = basePrice + toppingTotal;
+
             order.TotalAmount += orderItem.Price;
-            
+
             await _unitOfWork.Orders.UpdateAsync(order);
             await _unitOfWork.OrderItems.AddAsync(orderItem);
             await _unitOfWork.SaveAsync();
         }
+
 
 
         public Task<bool> DeleteOrderItemAsync(Guid id)
@@ -63,6 +79,7 @@ namespace BAL.Services.Implement
 
         public async Task<ICollection<OrderItem>> GetAllOrderItemsAsync()
         {
+            string includeProperties = "Order,ProductSize,Toppings";
             ICollection<OrderItem> orderItems = await _unitOfWork.OrderItems.GetAllAsync();
             if (orderItems == null)
             {

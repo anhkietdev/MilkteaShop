@@ -11,6 +11,6 @@
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
         public decimal WalletBalance { get; set; } = 0;
         public Guid? StoreId { get; set; }
-        public required virtual Store Store { get; set; }
+        public virtual Store Store { get; set; }
     }
 }

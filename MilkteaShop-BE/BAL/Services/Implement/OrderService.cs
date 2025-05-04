@@ -49,11 +49,6 @@ namespace BAL.Services.Implement
                         Order = newOrder,
                     };
 
-                    if (itemDto.ParentOrderItemId.HasValue)
-                    {
-                        orderItem.ParentOrderItemId = itemDto.ParentOrderItemId;
-                    }
-
                     newOrder.OrderItems.Add(orderItem);
 
                     decimal itemTotal = orderItem.Price * orderItem.Quantity;
@@ -74,9 +69,21 @@ namespace BAL.Services.Implement
             return orderResponse;
         }
 
+        public async Task<bool> DeleteOrderAsync(Guid id)
+        {
+            Order? order = await _unitOfWork.Orders.GetAsync(o => o.Id == id);
+            if (order == null)
+            {
+                throw new Exception("Order not found");
+            }
+            await _unitOfWork.Orders.RemoveAsync(order);
+            await _unitOfWork.SaveAsync();
+            return true;
+        }
+
         public async Task<ICollection<OrderResponseDto>> GetAllAsync()
         {
-            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings";
             ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync(null,includeProperties);
             if (orders == null)
             {
@@ -88,13 +95,54 @@ namespace BAL.Services.Implement
 
         public async Task<OrderResponseDto> GetOrderByIdAsync(Guid id)
         {
-            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ToppingItems";
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings";
             Order? order = await _unitOfWork.Orders.GetAsync(o => o.Id == id, includeProperties);
             if (order == null)
             {
                 throw new Exception("Order not found");
             }
             OrderResponseDto orderResponse = _mapper.Map<OrderResponseDto>(order);
+            return orderResponse;
+        }
+
+        public async Task<OrderResponseDto> UpdateOrderAsync(Guid id, OrderRequestDto order)
+        {
+            Order? existingOrder = await _unitOfWork.Orders.GetAsync(o => o.Id == id);
+            if (existingOrder == null)
+            {
+                throw new Exception("Order not found");
+            }
+
+            existingOrder.TotalAmount = order.TotalAmount;
+            existingOrder.Description = order.Description;
+            existingOrder.PaymentMethod = order.PaymentMethod;
+
+            // Handle order items if they exist in the request
+            if (order.OrderItems != null && order.OrderItems.Any())
+            {
+                existingOrder.OrderItems.Clear(); // Clear existing items
+                foreach (var itemDto in order.OrderItems)
+                {
+                    var product = await _unitOfWork.ProductSize.GetAsync(p => p.Id == itemDto.ProductSizeId);
+                    if (product == null)
+                    {
+                        throw new ArgumentException($"Product with ID {itemDto.ProductSizeId} not found.");
+                    }
+                    OrderItem orderItem = new OrderItem
+                    {
+                        ProductSizeId = itemDto.ProductSizeId,
+                        ProductSize = product,
+                        Quantity = itemDto.Quantity,
+                        Price = product.Price,
+                        Description = itemDto.Description,
+                        Order = existingOrder,
+                    };
+
+                    existingOrder.OrderItems.Add(orderItem);
+                }
+            }
+            await _unitOfWork.SaveAsync();
+            OrderResponseDto orderResponse = _mapper.Map<OrderResponseDto>(existingOrder);
             return orderResponse;
         }
     }

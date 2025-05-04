@@ -8,5 +8,6 @@
         public decimal Price { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; }
         public virtual ICollection<ComboItem>? ComboItems { get; set; }
+        public virtual ICollection<OrderItemTopping>? UsedAsToppingIn { get; set; }
     }
 }
