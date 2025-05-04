@@ -43,9 +43,9 @@ namespace Presentation.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, StoreDto storeDto)
         {
-            await _storeService.CreateStoreAsync(storeDto);
+            await _storeService.UpdateStoreAsync(id, storeDto);
 
-            return NoContent(); // 204 if updated successfully
+            return Ok(); 
         }
 
         [HttpDelete("{id}")]
@@ -55,7 +55,7 @@ namespace Presentation.Controllers
             if (!result)
                 return NotFound();
 
-            return NoContent(); // 204 if deleted successfully
+            return Ok();
         }
     }
 }
