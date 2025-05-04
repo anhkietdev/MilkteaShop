@@ -69,20 +69,22 @@ namespace BAL.Services.Implement
 
         public async Task<AuthenResultDto> RegisterAsync(RegisterDto registerDto)
         {
-            var newUser = new User
-            {
-                Username = registerDto.Username,
-                PasswordHash = registerDto.Password,
-                PhoneNumber = registerDto.PhoneNumber,
-                StoreId = registerDto.StoreId,
-                Role = registerDto.Role,
-            };
 
-            var result = _unitOfWork.Users.AddAsync(newUser);
+            User user = _mapper.Map<User>(registerDto);
+            //var newUser = new User
+            //{
+            //    Username = registerDto.Username,
+            //    PasswordHash = registerDto.Password,
+            //    PhoneNumber = registerDto.PhoneNumber,
+            //    StoreId = registerDto.StoreId,
+            //    Role = registerDto.Role,
+            //};
+
+            var result = _unitOfWork.Users.AddAsync(user);
 
             await _unitOfWork.SaveAsync();
 
-            if (newUser == null)
+            if (user == null)
             {
                 return new AuthenResultDto
                 {
@@ -93,12 +95,17 @@ namespace BAL.Services.Implement
             var secretKey = _configuration["JwtSettings:SecretKey"];
             var issuer = _configuration["JwtSettings:Issuer"];
             var audience = _configuration["JwtSettings:Audience"];
-            string token = JwtGenerator.GenerateToken(newUser, secretKey, 1000000, issuer, audience);
+            string token = JwtGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
 
             return new AuthenResultDto
             {
                 IsSuccess = true,
                 Token = token,
+                Username = user.Username,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email,
+                ImageUrl = user.ImageUrl,
+                Role = user.Role.ToString()
             };
         }
         public async Task<User> GetUserByIdAsync(Guid id)
