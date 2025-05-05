@@ -44,14 +44,15 @@ namespace BAL.Services.Implement
             return new AuthenResultDto
             {
                 IsSuccess = true,
-                Token = token,
-               
-                    Username = user.Username,
-                    PhoneNumber = user.PhoneNumber,
-                    Email = user.Email,
-                    ImageUrl = user.ImageUrl,
-                    Role = user.Role.ToString()
-                
+                Token = token,               
+                Username = user.Username,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email,
+                ImageUrl = user.ImageUrl,
+                Role = user.Role.ToString(),
+                IsActive = user.IsActive,
+                UserId = user.Id,
+
             };
         }
 

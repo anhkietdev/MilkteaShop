@@ -55,7 +55,10 @@ namespace BAL
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()))
-                .ForMember(dest => dest.Token, opt => opt.Ignore());
+                .ForMember(dest => dest.Token, opt => opt.Ignore())
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
+
 
 
             CreateMap<Store, StoreDto>().ReverseMap();
