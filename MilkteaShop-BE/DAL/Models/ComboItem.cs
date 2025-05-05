@@ -4,7 +4,7 @@
     {
         public required string ComboCode { get; set; }
         public string? Description { get; set; }
-        public required virtual List<ProductSize> ProductSizes { get; set; } = new();
+        public virtual ICollection<ComboItemProductSize> ComboItemProductSizes { get; set; } = new List<ComboItemProductSize>();
         public int Quantity { get; set; }
         public decimal Price { get; set; }
 

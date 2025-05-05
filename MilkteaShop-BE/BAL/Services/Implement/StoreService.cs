@@ -3,6 +3,7 @@ using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,17 +25,23 @@ namespace BAL.Services.Implement
                 _mapper = mapper;
             }
 
-            public async Task<ICollection<Store>> GetAllStoreAsync()
+        public async Task<ICollection<Store>> GetAllStoreAsync()
+        {
+            var stores = await _unitOfWork.Stores.GetAllAsync(
+                includeProperties: "Users,Orders",
+                tracked: false
+            );
+
+            if (stores == null || stores.Count == 0)
             {
-                ICollection<Store> stores = await _unitOfWork.Stores.GetAllAsync();
-                if (stores == null)
-                {
-                    throw new Exception("No Store found");
-                }
-                return stores;
+                throw new Exception("No stores found");
             }
 
-            public async Task<Store> GetStoreByIdAsync(Guid id)
+            return stores;
+        }
+
+
+        public async Task<Store> GetStoreByIdAsync(Guid id)
             {
                 Store? stores = await _unitOfWork.Stores.GetAsync(c => c.Id == id);
                 if (stores == null)
