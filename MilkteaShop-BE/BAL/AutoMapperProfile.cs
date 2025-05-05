@@ -14,6 +14,14 @@ namespace BAL
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<ComboItem, ComboItemDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, AuthenResultDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()))
+                .ReverseMap();
+
             CreateMap<Store, StoreDto>().ReverseMap();
 
             CreateMap<CategoryExtraMapping, CategoryExtraMappingDto>().ReverseMap();
