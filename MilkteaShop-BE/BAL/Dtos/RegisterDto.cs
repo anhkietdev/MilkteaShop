@@ -2,5 +2,5 @@
 
 namespace BAL.Dtos
 {
-    public record RegisterDto(string Username, string Password, string PhoneNumber, Guid StoreId, Role Role);
+    public class RegisterDto(string Username, string Password, string PhoneNumber, Guid StoreId, Role Role);
 }

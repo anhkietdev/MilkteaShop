@@ -67,10 +67,10 @@ namespace BAL.Services.Implement
 
 
 
-        public async Task<User> RegisterAsync(RegisterDto registerDto)
+        public async Task<User> RegisterAsync(UserDto userDto)
         {
 
-            User user = _mapper.Map<User>(registerDto);
+            User user = _mapper.Map<User>(userDto);
             //var newUser = new User
             //{
             //    Username = registerDto.Username,
