@@ -71,6 +71,7 @@ namespace BAL.Services.Implement
             product.Description = productDto.Description;
             product.ImageUrl = productDto.ImageUrl;           
             product.CategoryId = productDto.CategoryId;
+            product.IsActive = productDto.IsActive;
 
 
             await _unitOfWork.Products.UpdateAsync(product);

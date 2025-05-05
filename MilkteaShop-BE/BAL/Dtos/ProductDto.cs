@@ -10,5 +10,6 @@ namespace BAL.Dtos
         public decimal Price { get; set; }
         public string? ImageUrl { get; set; }
         public Size Size { get; set; }
+        public bool IsActive { get; set; }
     }
 }

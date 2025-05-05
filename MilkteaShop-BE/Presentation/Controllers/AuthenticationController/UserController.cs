@@ -31,15 +31,13 @@ namespace Presentation.Controllers.AuthenticationController
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register(UserDto registerDto)
         {
             var result = await _userService.RegisterAsync(registerDto);
-
-            if (!result.IsSuccess)
+            if (result == null)
             {
                 return BadRequest(new { message = "Registration failed" });
             }
-
             return Ok(result);
         }
 
