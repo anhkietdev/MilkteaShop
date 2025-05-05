@@ -44,14 +44,15 @@ namespace BAL.Services.Implement
             return new AuthenResultDto
             {
                 IsSuccess = true,
-                Token = token,
-               
-                    Username = user.Username,
-                    PhoneNumber = user.PhoneNumber,
-                    Email = user.Email,
-                    ImageUrl = user.ImageUrl,
-                    Role = user.Role.ToString()
-                
+                Token = token,               
+                Username = user.Username,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email,
+                ImageUrl = user.ImageUrl,
+                Role = user.Role.ToString(),
+                IsActive = user.IsActive,
+                UserId = user.Id,
+
             };
         }
 
@@ -67,35 +68,80 @@ namespace BAL.Services.Implement
 
 
 
-        public async Task<User> RegisterAsync(UserDto userDto)
+        public async Task<AuthenResultDto> RegisterAsync(NewRegisterDto userDto)
         {
-
-            User user = _mapper.Map<User>(userDto);
-            //var newUser = new User
-            //{
-            //    Username = registerDto.Username,
-            //    PasswordHash = registerDto.Password,
-            //    PhoneNumber = registerDto.PhoneNumber,
-            //    StoreId = registerDto.StoreId,
-            //    Role = registerDto.Role,
-            //};
-
-            var result = _unitOfWork.Users.AddAsync(user);
-
-            await _unitOfWork.SaveAsync();
-
-            if (user == null)
+            try
             {
-                throw new Exception("User created failed!");
+                // Validate the input
+                if (string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password) ||
+                    string.IsNullOrEmpty(userDto.PhoneNumber))
+                {
+                    return new AuthenResultDto
+                    {
+                        IsSuccess = false,
+                        ErrorMessage= "Required fields are missing"
+                    };
+                }
+
+                // Check if user already exists
+                var existingUser = await _unitOfWork.Users.GetAsync(
+                    u => u.Username == userDto.Username || u.PhoneNumber == userDto.PhoneNumber,
+                    tracked: false);
+
+                if (existingUser != null)
+                {
+                    return new AuthenResultDto
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Username or phone number already in use"
+                    };
+                }
+
+                // Create new user with proper password hashing
+                User newUser = new User
+                {
+                    Username = userDto.Username,
+                    // TODO: Implement proper password hashing instead of storing plaintext
+                    PasswordHash = userDto.Password, // Consider using BCrypt or other hashing library
+                    PhoneNumber = userDto.PhoneNumber,
+                    Email = userDto.Email,
+                    ImageUrl = userDto.ImageUrl,
+                    Role = userDto.Role,
+                    StoreId = userDto.StoreId,
+                };
+
+                await _unitOfWork.Users.AddAsync(newUser);
+                await _unitOfWork.SaveAsync();
+
+                var secretKey = _configuration["JwtSettings:SecretKey"];
+                var issuer = _configuration["JwtSettings:Issuer"];
+                var audience = _configuration["JwtSettings:Audience"];
+                string token = JwtGenerator.GenerateToken(newUser, secretKey, 1000000, issuer, audience);
+
+                return new AuthenResultDto
+                {
+                    Token = token,
+                    IsSuccess = true,
+                    Username = newUser.Username,
+                    Email = newUser.Email,
+                    PhoneNumber = newUser.PhoneNumber,
+                    ImageUrl = newUser.ImageUrl,
+                    Role = newUser.Role.ToString()
+                };
             }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                Console.WriteLine($"Registration failed: {ex.Message}");
 
-            //var secretKey = _configuration["JwtSettings:SecretKey"];
-            //var issuer = _configuration["JwtSettings:Issuer"];
-            //var audience = _configuration["JwtSettings:Audience"];
-            //string token = JwtGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
-
-            return user;
+                return new AuthenResultDto
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Registration failed. Please try again."
+                };
+            }
         }
+
         public async Task<User> GetUserByIdAsync(Guid id)
         {
             User? users = await _unitOfWork.Users.GetAsync(c => c.Id == id);

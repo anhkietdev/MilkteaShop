@@ -58,6 +58,11 @@ namespace Presentation.ResolveDependencies
                 });
             });
 
+            services.AddControllers().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            });
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
