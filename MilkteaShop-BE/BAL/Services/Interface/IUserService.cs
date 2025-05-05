@@ -7,7 +7,7 @@ namespace BAL.Services.Interface
     public interface IUserService
     {
         Task<AuthenResultDto> LoginAsync(LoginDto loginDto);
-        Task<User> RegisterAsync(UserDto registerDto);
+        Task<AuthenResultDto> RegisterAsync(NewRegisterDto registerDto);
         Task<ICollection<User>> GetAllUserAsync();
         Task UpdateUserAsync(Guid id, UserDto userDto);
         Task<User> GetUserByIdAsync(Guid id);

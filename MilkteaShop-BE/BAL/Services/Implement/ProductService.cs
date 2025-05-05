@@ -38,7 +38,8 @@ namespace BAL.Services.Implement
 
         public async Task<ICollection<Product>> GetAllAsync()
         {
-            ICollection<Product> products = await _unitOfWork.Products.GetAllAsync();
+            string? includeProperties = "Category,ProductSizes";
+            ICollection<Product> products = await _unitOfWork.Products.GetAllAsync(null,includeProperties);
             if (products == null)
             {
                 throw new Exception("No products found");
@@ -48,7 +49,8 @@ namespace BAL.Services.Implement
 
         public async Task<Product> GetByIdAsync(Guid id)
         {
-            Product? product = await _unitOfWork.Products.GetAsync(p => p.Id == id);
+            string includeProperties = "ProductSizes";
+            Product? product = await _unitOfWork.Products.GetAsync(p => p.Id == id, includeProperties);
             if (product == null)
             {
                 throw new Exception("Product not found");

@@ -1,6 +1,8 @@
 ﻿using BAL.Dtos;
 using BAL.Services.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Presentation.Controllers.AuthenticationController
 {
@@ -9,11 +11,15 @@ namespace Presentation.Controllers.AuthenticationController
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
+
+
 
         // --------- AUTHENTICATION ---------
 
@@ -30,15 +36,34 @@ namespace Presentation.Controllers.AuthenticationController
             return Ok(result);
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserDto registerDto)
+        [HttpPost("register")]        
+        public async Task<IActionResult> Register([FromBody] NewRegisterDto model)
         {
-            var result = await _userService.RegisterAsync(registerDto);
-            if (result == null)
+            try
             {
-                return BadRequest(new { message = "Registration failed" });
+                // Log the incoming request for debugging
+                _logger.LogInformation($"Register request received: {JsonSerializer.Serialize(model)}");
+
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning($"Invalid model state: {JsonSerializer.Serialize(ModelState)}");
+                    return BadRequest(ModelState);
+                }
+
+                var result = await _userService.RegisterAsync(model);
+
+                if (!result.IsSuccess)
+                {
+                    return BadRequest(result);
+                }
+
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during registration");
+                return StatusCode(500, new { message = "An error occurred during registration", error = ex.Message });
+            }
         }
 
         // --------- USER MANAGEMENT ---------

@@ -8,7 +8,7 @@
         public required virtual Category Category { get; set; }
         public string? ImageUrl { get; set; }
         public string? ProductType { get; set; }
-        public virtual ICollection<ProductSize> ProductSizes { get; set; } = new List<ProductSize>();
+        public virtual ICollection<ProductSize> ProductSizes { get; set; }
     }
 }
 
