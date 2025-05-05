@@ -25,21 +25,31 @@ namespace BAL.Services.Implement
                 _mapper = mapper;
             }
 
-        public async Task<ICollection<Store>> GetAllStoreAsync()
-        {
-            var stores = await _unitOfWork.Stores.GetAllAsync(
-                includeProperties: "Users,Orders",
-                tracked: false
-            );
+        //public async Task<ICollection<Store>> GetAllStoreAsync()
+        //{
+        //    var stores = await _unitOfWork.Stores.GetAllAsync(
+        //        includeProperties: "Users,Orders",
+        //        tracked: false
+        //    );
 
-            if (stores == null || stores.Count == 0)
+        //    if (stores == null || stores.Count == 0)
+        //    {
+        //        throw new Exception("No stores found");
+        //    }
+
+        //    return stores;
+        //}
+        public async Task<ICollection<StoreResponeDto>> GetAllStoreAsync()
+        {
+            string includeProperties = "Users,Orders";
+            ICollection<Store> stores = await _unitOfWork.Stores.GetAllAsync(null, includeProperties);
+            if (stores == null)
             {
-                throw new Exception("No stores found");
+                throw new Exception("No order found");
             }
 
-            return stores;
+            return _mapper.Map<ICollection<StoreResponeDto>>(stores);
         }
-
 
         public async Task<Store> GetStoreByIdAsync(Guid id)
             {
@@ -71,6 +81,8 @@ namespace BAL.Services.Implement
             store.Description = storeDto.Description;
             store.Address = storeDto.Address;
             store.PhoneNumber = storeDto.PhoneNumber;
+            store.IsActive = storeDto.IsActive;
+
 
 
             await _unitOfWork.Stores.UpdateAsync(store);
