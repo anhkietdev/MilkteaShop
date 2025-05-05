@@ -67,7 +67,7 @@ namespace BAL.Services.Implement
 
 
 
-        public async Task<AuthenResultDto> RegisterAsync(RegisterDto registerDto)
+        public async Task<User> RegisterAsync(RegisterDto registerDto)
         {
 
             User user = _mapper.Map<User>(registerDto);
@@ -86,27 +86,15 @@ namespace BAL.Services.Implement
 
             if (user == null)
             {
-                return new AuthenResultDto
-                {
-                    IsSuccess = false,
-                };
+                throw new Exception("User created failed!");
             }
 
-            var secretKey = _configuration["JwtSettings:SecretKey"];
-            var issuer = _configuration["JwtSettings:Issuer"];
-            var audience = _configuration["JwtSettings:Audience"];
-            string token = JwtGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
+            //var secretKey = _configuration["JwtSettings:SecretKey"];
+            //var issuer = _configuration["JwtSettings:Issuer"];
+            //var audience = _configuration["JwtSettings:Audience"];
+            //string token = JwtGenerator.GenerateToken(user, secretKey, 1000000, issuer, audience);
 
-            return new AuthenResultDto
-            {
-                IsSuccess = true,
-                Token = token,
-                Username = user.Username,
-                PhoneNumber = user.PhoneNumber,
-                Email = user.Email,
-                ImageUrl = user.ImageUrl,
-                Role = user.Role.ToString()
-            };
+            return user;
         }
         public async Task<User> GetUserByIdAsync(Guid id)
         {
