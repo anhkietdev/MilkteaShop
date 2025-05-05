@@ -61,6 +61,7 @@ namespace BAL
 
 
 
+
             CreateMap<Store, StoreDto>().ReverseMap();
 
             CreateMap<CategoryExtraMapping, CategoryExtraMappingDto>().ReverseMap();
