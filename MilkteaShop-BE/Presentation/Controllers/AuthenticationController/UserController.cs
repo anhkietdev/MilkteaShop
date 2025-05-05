@@ -34,12 +34,10 @@ namespace Presentation.Controllers.AuthenticationController
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
             var result = await _userService.RegisterAsync(registerDto);
-
-            if (!result.IsSuccess)
+            if (result == null)
             {
                 return BadRequest(new { message = "Registration failed" });
             }
-
             return Ok(result);
         }
 
