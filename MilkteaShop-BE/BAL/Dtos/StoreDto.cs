@@ -14,7 +14,7 @@ namespace BAL.Dtos
         public string? Description { get; set; }
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
-
+        
 
         // Optionally, you can include IDs or minimal info about Users and Orders,
         // but usually DTOs keep it simple unless you need nested data.
