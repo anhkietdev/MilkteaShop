@@ -6,12 +6,11 @@ using DAL.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BAL.Services.Implement
 {
-    public class ComboItemService: IComboItemService
+    public class ComboItemService : IComboItemService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -21,22 +20,23 @@ namespace BAL.Services.Implement
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         public async Task<ICollection<ComboItem>> GetAllComboItemAsync()
         {
-            ICollection<ComboItem> comboItems = await _unitOfWork.ComboItems.GetAllAsync();
-            if (comboItems == null)
+            ICollection<ComboItem> comboItems = await _unitOfWork.ComboItems.GetAllAsync(includeProperties: "ProductSizes");
+            if (comboItems == null || comboItems.Count == 0)
             {
-                throw new Exception("No categories found");
+                throw new Exception("No combo items found");
             }
             return comboItems;
         }
 
         public async Task<ComboItem> GetComboItemByIdAsync(Guid id)
         {
-            ComboItem? comboItem = await _unitOfWork.ComboItems.GetAsync(c => c.Id == id);
+            ComboItem? comboItem = await _unitOfWork.ComboItems.GetAsync(c => c.Id == id, includeProperties: "ProductSizes");
             if (comboItem == null)
             {
-                throw new Exception("Category not found");
+                throw new Exception("Combo item not found");
             }
             return comboItem;
         }
@@ -45,26 +45,33 @@ namespace BAL.Services.Implement
         {
             ComboItem comboItem = _mapper.Map<ComboItem>(comboItemDto);
 
+            // Load related ProductSizes
+            var productSizes = await _unitOfWork.ProductSize.GetAllAsync(ps => comboItemDto.ProductSizeIds.Contains(ps.Id));
+            comboItem.ProductSizes = productSizes.ToList();
             await _unitOfWork.ComboItems.AddAsync(comboItem);
             await _unitOfWork.SaveAsync();
         }
 
         public async Task UpdateComboItemAsync(Guid id, ComboItemDto comboItemDto)
         {
-            ComboItem? comboItem = await _unitOfWork.ComboItems.GetAsync(c => c.Id == id);
+            ComboItem? comboItem = await _unitOfWork.ComboItems.GetAsync(c => c.Id == id, includeProperties: "ProductSizes");
             if (comboItem == null)
             {
                 throw new Exception("ComboItem not found");
             }
+
             _mapper.Map(comboItemDto, comboItem);
 
-            comboItem.ProductSizeId = comboItemDto.ProductSizeId;
+            // Update many-to-many ProductSizes
+            var productSizes = await _unitOfWork.ProductSize.GetAllAsync(ps => comboItemDto.ProductSizeIds.Contains(ps.Id));
+            comboItem.ProductSizes = productSizes.ToList();
+
             comboItem.Description = comboItemDto.Description;
             comboItem.ComboCode = comboItemDto.ComboCode;
             comboItem.Quantity = comboItemDto.Quantity;
-            await _unitOfWork.ComboItems.UpdateAsync(comboItem); 
+            comboItem.Price = comboItemDto.Price;
 
-         
+            await _unitOfWork.ComboItems.UpdateAsync(comboItem);
             await _unitOfWork.SaveAsync();
         }
 
@@ -76,12 +83,9 @@ namespace BAL.Services.Implement
                 return false;
             }
 
-            await _unitOfWork.ComboItems.RemoveAsync(comboItem); // Fixed line
+            await _unitOfWork.ComboItems.RemoveAsync(comboItem);
             await _unitOfWork.SaveAsync();
             return true;
         }
-
-
-
     }
 }
