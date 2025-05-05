@@ -31,7 +31,7 @@ namespace Presentation.Controllers.AuthenticationController
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register(UserDto registerDto)
         {
             var result = await _userService.RegisterAsync(registerDto);
             if (result == null)
