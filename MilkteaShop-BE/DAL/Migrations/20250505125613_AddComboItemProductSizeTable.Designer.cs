@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250505125613_AddComboItemProductSizeTable")]
+    partial class AddComboItemProductSizeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ComboItemProductSize", b =>
+                {
+                    b.Property<Guid>("ComboItemsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductSizesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ComboItemsId", "ProductSizesId");
+
+                    b.HasIndex("ProductSizesId");
+
+                    b.ToTable("ComboItemProductSize");
+                });
 
             modelBuilder.Entity("DAL.Models.Category", b =>
                 {
@@ -130,9 +148,6 @@ namespace DAL.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("ProductSizeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -144,48 +159,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductSizeId");
-
                     b.ToTable("ComboItems");
-                });
-
-            modelBuilder.Entity("DAL.Models.ComboItemProductSize", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ComboItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("ProductSizeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComboItemId");
-
-                    b.HasIndex("ProductSizeId");
-
-                    b.ToTable("ComboItemProductSizes");
                 });
 
             modelBuilder.Entity("DAL.Models.Order", b =>
@@ -511,6 +485,21 @@ namespace DAL.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ComboItemProductSize", b =>
+                {
+                    b.HasOne("DAL.Models.ComboItem", null)
+                        .WithMany()
+                        .HasForeignKey("ComboItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.ProductSize", null)
+                        .WithMany()
+                        .HasForeignKey("ProductSizesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DAL.Models.CategoryExtraMapping", b =>
                 {
                     b.HasOne("DAL.Models.Category", null)
@@ -532,32 +521,6 @@ namespace DAL.Migrations
                     b.Navigation("ExtraCategory");
 
                     b.Navigation("MainCategory");
-                });
-
-            modelBuilder.Entity("DAL.Models.ComboItem", b =>
-                {
-                    b.HasOne("DAL.Models.ProductSize", null)
-                        .WithMany("ComboItems")
-                        .HasForeignKey("ProductSizeId");
-                });
-
-            modelBuilder.Entity("DAL.Models.ComboItemProductSize", b =>
-                {
-                    b.HasOne("DAL.Models.ComboItem", "ComboItem")
-                        .WithMany("ComboItemProductSizes")
-                        .HasForeignKey("ComboItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.ProductSize", "ProductSize")
-                        .WithMany()
-                        .HasForeignKey("ProductSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ComboItem");
-
-                    b.Navigation("ProductSize");
                 });
 
             modelBuilder.Entity("DAL.Models.Order", b =>
@@ -655,11 +618,6 @@ namespace DAL.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("DAL.Models.ComboItem", b =>
-                {
-                    b.Navigation("ComboItemProductSizes");
-                });
-
             modelBuilder.Entity("DAL.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -677,8 +635,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.ProductSize", b =>
                 {
-                    b.Navigation("ComboItems");
-
                     b.Navigation("OrderItems");
 
                     b.Navigation("UsedAsToppingIn");

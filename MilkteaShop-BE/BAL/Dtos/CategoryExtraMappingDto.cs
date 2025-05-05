@@ -12,9 +12,6 @@ namespace BAL.Dtos
         public Guid MainCategoryId { get; set; }
         public Guid ExtraCategoryId { get; set; }
 
-        // Optional: Include names or other info if needed
-        // public string MainCategoryName { get; set; }
-        // public string ExtraCategoryName { get; set; }
     }
 
 }

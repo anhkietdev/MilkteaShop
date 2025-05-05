@@ -5,7 +5,7 @@ namespace BAL.Services.Interface
 {
     public interface IComboItemService
     {
-        Task<ICollection<ComboItem>> GetAllComboItemAsync();
+        Task<ICollection<ComboItemDto>> GetAllComboItemAsync();
 
         Task<ComboItem> GetComboItemByIdAsync(Guid id);
 
