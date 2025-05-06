@@ -11,7 +11,7 @@ namespace BAL.Services.Interface
     public interface IStoreService
     {
         Task<ICollection<StoreResponeDto>> GetAllStoreAsync();
-        Task<Store> GetStoreByIdAsync(Guid id);
+        Task<StoreResponeDto> GetStoreByIdAsync(Guid id);
         Task CreateStoreAsync(StoreDto storeDto);
         Task UpdateStoreAsync(Guid id, StoreDto storeDto);
         Task<bool> DeleteStoreAsync(Guid id);

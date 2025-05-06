@@ -45,23 +45,34 @@ namespace BAL.Services.Implement
             ICollection<Store> stores = await _unitOfWork.Stores.GetAllAsync(null, includeProperties);
             if (stores == null)
             {
-                throw new Exception("No order found");
+                throw new Exception("No Store found");
             }
 
             return _mapper.Map<ICollection<StoreResponeDto>>(stores);
         }
 
-        public async Task<Store> GetStoreByIdAsync(Guid id)
+        //public async Task<Store> GetStoreByIdAsync(Guid id)
+        //    {
+        //        Store? stores = await _unitOfWork.Stores.GetAsync(c => c.Id == id);
+        //        if (stores == null)
+        //        {
+        //            throw new Exception("Store not found");
+        //        }
+        //        return stores;
+        //    }
+        public async Task<StoreResponeDto> GetStoreByIdAsync(Guid id)
+        {
+            string includeProperties = "Users,Orders";
+            Store? stores = await _unitOfWork.Stores.GetAsync(o => o.Id == id, includeProperties);
+            if (stores == null)
             {
-                Store? stores = await _unitOfWork.Stores.GetAsync(c => c.Id == id);
-                if (stores == null)
-                {
-                    throw new Exception("Store not found");
-                }
-                return stores;
+                throw new Exception("Store not found");
             }
+            return _mapper.Map<StoreResponeDto>(stores);
+        }
 
-            public async Task CreateStoreAsync(StoreDto storeDto)
+
+        public async Task CreateStoreAsync(StoreDto storeDto)
             {
                 Store store = _mapper.Map<Store>(storeDto);
                 await _unitOfWork.Stores.AddAsync(store);
