@@ -1,4 +1,5 @@
 ﻿using BAL.Dtos;
+using BAL.Services.Implement;
 using BAL.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,23 +40,30 @@ namespace Presentation.Controllers
             }
         }
 
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetById(Guid id)
+        //{
+        //    try
+        //    {
+        //        var store = await _storeService.GetStoreByIdAsync(id);
+        //        return store == null ? NotFound() : Ok(store);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error getting store with id {Id}", id);
+        //        return StatusCode(StatusCodes.Status500InternalServerError, new
+        //        {
+        //            Message = $"An error occurred while retrieving store with id {id}",
+        //            Details = ex.Message
+        //        });
+        //    }
+        //}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            try
-            {
-                var store = await _storeService.GetStoreByIdAsync(id);
-                return store == null ? NotFound() : Ok(store);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting store with id {Id}", id);
-                return StatusCode(StatusCodes.Status500InternalServerError, new
-                {
-                    Message = $"An error occurred while retrieving store with id {id}",
-                    Details = ex.Message
-                });
-            }
+            var store = await _storeService.GetStoreByIdAsync(id);
+
+            return Ok(store);
         }
 
         [HttpPost]
