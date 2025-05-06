@@ -62,12 +62,36 @@ namespace BAL
 
 
             CreateMap<Store, StoreDto>().ReverseMap();
+            CreateMap<Store, StoreResponeDto>()
+       .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+       .ForMember(dest => dest.StoreName, opt => opt.MapFrom(src => src.StoreName))
+       .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+       .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+       .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+       .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+       .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders))  // Assuming Orders is a collection
+       .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users))  // Assuming Users is a collection
+       .ForMember(dest => dest.UserIds, opt => opt.MapFrom(src => src.Users.Select(u => u.Id).ToList())) // Example for mapping UserIds from a collection of UserDto
+       .ForMember(dest => dest.OrderIds, opt => opt.MapFrom(src => src.Orders.Select(o => o.Id).ToList()))  // Example for mapping OrderIds from a collection of OrderDto
+       .ReverseMap();
+
 
             CreateMap<CategoryExtraMapping, CategoryExtraMappingDto>().ReverseMap();
 
 
             CreateMap<Order, OrderRequestDto>().ReverseMap();
 
+            CreateMap<Order, OrderStoreResponseDto>()
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
+                
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
+                .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.TotalAmount))
+                
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.OrderNumber, opt => opt.MapFrom(src => src.OrderNumber))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                
+                .ReverseMap();
             CreateMap<Order, OrderResponseDto>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
                 .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.StoreId))

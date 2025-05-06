@@ -18,38 +18,59 @@ namespace BAL.Services.Implement
             _mapper = mapper;
         }
 
-        public async Task<ICollection<Store>> GetAllStoreAsync()
-        {
-            var stores = await _unitOfWork.Stores.GetAllAsync(
-                includeProperties: "Users,Orders",
-                tracked: false
-            );
+        //public async Task<ICollection<Store>> GetAllStoreAsync()
+        //{
+        //    var stores = await _unitOfWork.Stores.GetAllAsync(
+        //        includeProperties: "Users,Orders",
+        //        tracked: false
+        //    );
 
-            if (stores == null || stores.Count == 0)
+        //    if (stores == null || stores.Count == 0)
+        //    {
+        //        throw new Exception("No stores found");
+        //    }
+
+        //    return stores;
+        //}
+        public async Task<ICollection<StoreResponeDto>> GetAllStoreAsync()
+        {
+            string includeProperties = "Users,Orders";
+            ICollection<Store> stores = await _unitOfWork.Stores.GetAllAsync(null, includeProperties);
+            if (stores == null)
             {
-                throw new Exception("No stores found");
+                throw new Exception("No Store found");
             }
 
-            return stores;
+            return _mapper.Map<ICollection<StoreResponeDto>>(stores);
         }
 
-
-        public async Task<Store> GetStoreByIdAsync(Guid id)
+        //public async Task<Store> GetStoreByIdAsync(Guid id)
+        //    {
+        //        Store? stores = await _unitOfWork.Stores.GetAsync(c => c.Id == id);
+        //        if (stores == null)
+        //        {
+        //            throw new Exception("Store not found");
+        //        }
+        //        return stores;
+        //    }
+        public async Task<StoreResponeDto> GetStoreByIdAsync(Guid id)
         {
-            Store? stores = await _unitOfWork.Stores.GetAsync(c => c.Id == id);
+            string includeProperties = "Users,Orders";
+            Store? stores = await _unitOfWork.Stores.GetAsync(o => o.Id == id, includeProperties);
             if (stores == null)
             {
                 throw new Exception("Store not found");
             }
-            return stores;
+            return _mapper.Map<StoreResponeDto>(stores);
         }
 
+
         public async Task CreateStoreAsync(StoreDto storeDto)
-        {
-            Store store = _mapper.Map<Store>(storeDto);
-            await _unitOfWork.Stores.AddAsync(store);
-            await _unitOfWork.SaveAsync();
-        }
+            {
+                Store store = _mapper.Map<Store>(storeDto);
+                await _unitOfWork.Stores.AddAsync(store);
+                await _unitOfWork.SaveAsync();
+            }
 
         public async Task UpdateStoreAsync(Guid id, StoreDto storeDto)
         {
@@ -64,6 +85,8 @@ namespace BAL.Services.Implement
             store.Description = storeDto.Description;
             store.Address = storeDto.Address;
             store.PhoneNumber = storeDto.PhoneNumber;
+            store.IsActive = storeDto.IsActive;
+
 
 
             await _unitOfWork.Stores.UpdateAsync(store);
