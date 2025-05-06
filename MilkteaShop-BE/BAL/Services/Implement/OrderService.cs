@@ -25,6 +25,7 @@ namespace BAL.Services.Implement
             newOrder.OrderNumber = orderNumber;
             newOrder.CreatedAt = DateTime.UtcNow;
             newOrder.PaymentMethod = orderRequest.PaymentMethod;
+            newOrder.StoreId = orderRequest.StoreId;
 
             // Handle order items if they exist in the request
             if (orderRequest.OrderItems != null && orderRequest.OrderItems.Any())

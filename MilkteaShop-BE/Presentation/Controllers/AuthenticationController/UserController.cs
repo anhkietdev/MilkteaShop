@@ -1,6 +1,5 @@
 ﻿using BAL.Dtos;
 using BAL.Services.Interface;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -36,7 +35,7 @@ namespace Presentation.Controllers.AuthenticationController
             return Ok(result);
         }
 
-        [HttpPost("register")]        
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] NewRegisterDto model)
         {
             try

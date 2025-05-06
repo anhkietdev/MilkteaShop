@@ -11,12 +11,12 @@ namespace BAL.Services.Implement
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
-        
+
         private readonly IMapper _mapper;
         public UserService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper)
         {
             _mapper = mapper;
-            _unitOfWork = unitOfWork;  
+            _unitOfWork = unitOfWork;
             _configuration = configuration;
         }
 
@@ -44,7 +44,7 @@ namespace BAL.Services.Implement
             return new AuthenResultDto
             {
                 IsSuccess = true,
-                Token = token,               
+                Token = token,
                 Username = user.Username,
                 PhoneNumber = user.PhoneNumber,
                 Email = user.Email,
@@ -59,7 +59,7 @@ namespace BAL.Services.Implement
         public async Task<ICollection<User>> GetAllUserAsync()
         {
             ICollection<User> users = await _unitOfWork.Users.GetAllAsync();
-            if (users== null)
+            if (users == null)
             {
                 throw new Exception("No User found");
             }
@@ -79,7 +79,7 @@ namespace BAL.Services.Implement
                     return new AuthenResultDto
                     {
                         IsSuccess = false,
-                        ErrorMessage= "Required fields are missing"
+                        ErrorMessage = "Required fields are missing"
                     };
                 }
 
