@@ -128,6 +128,10 @@ namespace BAL
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Toppings, opt => opt.MapFrom(src => src.Toppings));
             CreateMap<OrderItem, OrderItemRequestDto>().ReverseMap();
+
+            CreateMap<Store, OrderSummaryDto>()
+                .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.StoreName, opt => opt.MapFrom(src => src.StoreName));
         }
     }
 }

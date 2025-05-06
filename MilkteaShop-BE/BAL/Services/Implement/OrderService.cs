@@ -145,5 +145,143 @@ namespace BAL.Services.Implement
             OrderResponseDto orderResponse = _mapper.Map<OrderResponseDto>(existingOrder);
             return orderResponse;
         }
+
+        public async Task<OrderSummaryDto> GetTodayOrdersAsync(Guid? storeId = null)
+        {
+            DateTime today = DateTime.UtcNow.Date;
+            DateTime tomorrow = today.AddDays(1);
+
+            var orders = await GetOrdersInTimeRange(today, tomorrow, storeId);
+
+            string storeName = string.Empty;
+            if (storeId.HasValue)
+            {
+                var store = await _unitOfWork.Stores.GetAsync(s => s.Id == storeId.Value);
+                storeName = store?.StoreName ?? "Unknown Store";
+            }
+
+            return new OrderSummaryDto
+            {
+                TotalOrders = orders.Count,
+                TotalAmount = orders.Sum(o => o.TotalAmount),
+                StartDate = today,
+                EndDate = tomorrow,
+                StoreId = storeId,
+                StoreName = storeName
+            };
+        }
+
+        public async Task<OrderSummaryDto> GetWeekOrdersAsync(Guid? storeId = null)
+        {
+            DateTime today = DateTime.UtcNow.Date;
+            int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
+            DateTime startOfWeek = today.AddDays(-diff);
+            DateTime endOfWeek = startOfWeek.AddDays(7);
+
+            var orders = await GetOrdersInTimeRange(startOfWeek, endOfWeek, storeId);
+
+            string storeName = string.Empty;
+            if (storeId.HasValue)
+            {
+                var store = await _unitOfWork.Stores.GetAsync(s => s.Id == storeId.Value);
+                storeName = store?.StoreName ?? "Unknown Store";
+            }
+
+            return new OrderSummaryDto
+            {
+                TotalOrders = orders.Count,
+                TotalAmount = orders.Sum(o => o.TotalAmount),
+                StartDate = startOfWeek,
+                EndDate = endOfWeek,
+                StoreId = storeId,
+                StoreName = storeName
+            };
+        }
+
+        public async Task<OrderSummaryDto> GetMonthOrdersAsync(Guid? storeId = null)
+        {
+            DateTime today = DateTime.UtcNow.Date;
+            DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
+            DateTime endOfMonth = startOfMonth.AddMonths(1);
+
+            var orders = await GetOrdersInTimeRange(startOfMonth, endOfMonth, storeId);
+
+            string storeName = string.Empty;
+            if (storeId.HasValue)
+            {
+                var store = await _unitOfWork.Stores.GetAsync(s => s.Id == storeId.Value);
+                storeName = store?.StoreName ?? "Unknown Store";
+            }
+
+            return new OrderSummaryDto
+            {
+                TotalOrders = orders.Count,
+                TotalAmount = orders.Sum(o => o.TotalAmount),
+                StartDate = startOfMonth,
+                EndDate = endOfMonth,
+                StoreId = storeId,
+                StoreName = storeName
+            };
+        }
+
+        public async Task<OrderSummaryDto> GetYearOrdersAsync(Guid? storeId = null)
+        {
+            DateTime today = DateTime.UtcNow.Date;
+            DateTime startOfYear = new DateTime(today.Year, 1, 1);
+            DateTime endOfYear = startOfYear.AddYears(1);
+
+            var orders = await GetOrdersInTimeRange(startOfYear, endOfYear, storeId);
+
+            string storeName = string.Empty;
+            if (storeId.HasValue)
+            {
+                var store = await _unitOfWork.Stores.GetAsync(s => s.Id == storeId.Value);
+                storeName = store?.StoreName ?? "Unknown Store";
+            }
+
+            return new OrderSummaryDto
+            {
+                TotalOrders = orders.Count,
+                TotalAmount = orders.Sum(o => o.TotalAmount),
+                StartDate = startOfYear,
+                EndDate = endOfYear,
+                StoreId = storeId,
+                StoreName = storeName
+            };
+        }
+
+        public async Task<ICollection<OrderSummaryDto>> GetOrdersByStoreAsync(Guid storeId)
+        {
+            var store = await _unitOfWork.Stores.GetAsync(s => s.Id == storeId);
+            if (store == null)
+            {
+                throw new Exception($"Store with ID {storeId} not found");
+            }
+
+            var todaySummary = await GetTodayOrdersAsync(storeId);
+            var weekSummary = await GetWeekOrdersAsync(storeId);
+            var monthSummary = await GetMonthOrdersAsync(storeId);
+            var yearSummary = await GetYearOrdersAsync(storeId);
+
+            return new List<OrderSummaryDto> { todaySummary, weekSummary, monthSummary, yearSummary };
+        }
+
+        private async Task<ICollection<Order>> GetOrdersInTimeRange(DateTime startDate, DateTime endDate, Guid? storeId = null)
+        {
+            ICollection<Order> orders;
+
+            if (storeId.HasValue)
+            {
+                orders = await _unitOfWork.Orders.GetAllAsync(
+                    o => o.CreatedAt >= startDate && o.CreatedAt < endDate && o.StoreId == storeId.Value);
+            }
+            else
+            {
+                orders = await _unitOfWork.Orders.GetAllAsync(
+                    o => o.CreatedAt >= startDate && o.CreatedAt < endDate);
+            }
+
+            return orders;
+        }
     }
 }
