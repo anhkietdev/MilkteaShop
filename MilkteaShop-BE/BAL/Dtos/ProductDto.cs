@@ -11,5 +11,6 @@ namespace BAL.Dtos
         public string? ImageUrl { get; set; }
         public Size Size { get; set; }
         public bool IsActive { get; set; }
+        public string? ProductType { get; set; }
     }
 }
