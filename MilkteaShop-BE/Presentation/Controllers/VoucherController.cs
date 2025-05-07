@@ -1,5 +1,6 @@
 ﻿using BAL.Dtos;
 using BAL.Services.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
@@ -33,7 +34,7 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             await _voucherService.CreateAsync(voucherDto);
-            return CreatedAtAction(nameof(GetById), new { id = voucherDto.Id }, voucherDto);
+            return Ok();
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] VoucherRequestDto voucherDto)
