@@ -25,7 +25,7 @@ namespace BAL.Services.Implement
         }
 
         public async Task<bool> DeleteAsync(Guid id)
-        {            
+        {
             Product? product = await _unitOfWork.Products.GetAsync(p => p.Id == id);
             if (product == null)
             {
@@ -39,7 +39,7 @@ namespace BAL.Services.Implement
         public async Task<ICollection<Product>> GetAllAsync()
         {
             string? includeProperties = "Category,ProductSizes";
-            ICollection<Product> products = await _unitOfWork.Products.GetAllAsync(null,includeProperties);
+            ICollection<Product> products = await _unitOfWork.Products.GetAllAsync(null, includeProperties);
             if (products == null)
             {
                 throw new Exception("No products found");
@@ -69,9 +69,9 @@ namespace BAL.Services.Implement
             _mapper.Map(productDto, product);
 
             // Update the product with the new values
-            product.ProductName = productDto.ProductName;            
+            product.ProductName = productDto.ProductName;
             product.Description = productDto.Description;
-            product.ImageUrl = productDto.ImageUrl;           
+            product.ImageUrl = productDto.ImageUrl;
             product.CategoryId = productDto.CategoryId;
             product.IsActive = productDto.IsActive;
 

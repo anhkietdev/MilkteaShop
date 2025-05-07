@@ -33,13 +33,7 @@ namespace Presentation.Controllers
             if (orderItemDto == null)
             {
                 return BadRequest("Invalid data.");
-            }
-
-            // Kiểm tra dữ liệu trong orderItemDto
-            if (!orderItemDto.ToppingItems.Any())
-            {
-                return BadRequest("ToppingItems cannot be empty.");
-            }
+            }            
 
             try
             {

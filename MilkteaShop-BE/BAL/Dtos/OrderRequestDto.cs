@@ -9,6 +9,7 @@ namespace BAL.Dtos
         public string? Description { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public Guid UserId { get; set; }
-        public virtual ICollection<OrderItem>? OrderItems { get; set; }
+        public Guid? StoreId { get; set; }
+        public virtual ICollection<OrderItem>? OrderItems { get; set; }                
     }
 }
