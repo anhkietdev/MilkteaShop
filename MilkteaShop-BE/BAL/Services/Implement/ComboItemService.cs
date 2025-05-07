@@ -21,56 +21,68 @@ namespace BAL.Services.Implement
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<ICollection<ComboItemDto>> GetAllComboItemAsync()
+
+        public async Task<ICollection<ComboItemResponeDto>> GetAllComboItemAsync()
         {
-            // Fetch combo items including related product sizes
             var comboItems = await _unitOfWork.ComboItems
-                .GetAllAsync(includeProperties: "ComboItemProductSizes.ProductSize");
+                .GetAllAsync(includeProperties: "ComboItemProductSizes.ProductSize.Product");
 
             if (comboItems == null || !comboItems.Any())
             {
                 throw new Exception("No combo items found");
             }
 
-            // Map the entities to DTOs
-            var comboItemDtos = comboItems.Select(comboItem => new ComboItemDto
+            return comboItems.Select(comboItem => new ComboItemResponeDto
             {
-                ComboCode = comboItem.ComboCode, // Required field
-                Description = comboItem.Description, // Optional field
-                ProductSizeIds = comboItem.ComboItemProductSizes
-                    .Select(cips => cips.ProductSize.Id) // Extract ProductSize Ids
-                    .ToList(),
-                Quantity = comboItem.Quantity, // The quantity of the item
-                Price = comboItem.Price // The price of the item
+                ComboCode = comboItem.ComboCode,
+                Description = comboItem.Description,
+                ProductSizes = comboItem.ComboItemProductSizes
+                    .Select(cips => new ProductSizeResponseDto
+                    {
+                        Id = cips.ProductSize.Id,
+                        ProductId = cips.ProductSize.ProductId,
+                        ProductName = cips.ProductSize.Product.ProductName,
+                        Size = cips.ProductSize.Size,
+                        Price = cips.ProductSize.Price
+                    }).ToList(),
+                Price = comboItem.Price
             }).ToList();
-
-            return comboItemDtos;
         }
 
-
-        public async Task<ComboItem> GetComboItemByIdAsync(Guid id)
+        public async Task<ComboItemResponeDto> GetComboItemByIdAsync(Guid id)
         {
             var comboItem = await _unitOfWork.ComboItems
-                .GetAsync(
-                    c => c.Id == id,
-                    includeProperties: "ComboItemProductSizes.ProductSize");
+                .GetAsync(c => c.Id == id, includeProperties: "ComboItemProductSizes.ProductSize.Product");
 
             if (comboItem == null)
             {
                 throw new Exception("Combo item not found");
             }
-            return comboItem;
+
+            return new ComboItemResponeDto
+            {
+                ComboCode = comboItem.ComboCode,
+                Description = comboItem.Description,
+                ProductSizes = comboItem.ComboItemProductSizes
+                    .Select(cips => new ProductSizeResponseDto
+                    {
+                        Id = cips.ProductSize.Id,
+                        ProductId = cips.ProductSize.ProductId,
+                        ProductName = cips.ProductSize.Product.ProductName,
+                        Size = cips.ProductSize.Size,
+                        Price = cips.ProductSize.Price
+                    }).ToList(),
+                Price = comboItem.Price
+            };
         }
 
         public async Task CreateComboItemAsync(ComboItemDto comboItemDto)
         {
-            // Validate input
             if (comboItemDto == null)
             {
                 throw new ArgumentNullException(nameof(comboItemDto));
             }
 
-            // Check if product sizes exist
             var existingProductSizes = await _unitOfWork.ProductSize
                 .GetAllAsync(ps => comboItemDto.ProductSizeIds.Contains(ps.Id));
 
@@ -83,15 +95,14 @@ namespace BAL.Services.Implement
                 throw new KeyNotFoundException($"The following ProductSize IDs were not found: {string.Join(", ", missingIds)}");
             }
 
-            // Map and create combo item
             var comboItem = _mapper.Map<ComboItem>(comboItemDto);
+
             comboItem.ComboItemProductSizes = existingProductSizes
                 .Select(ps => new ComboItemProductSize
                 {
                     ProductSizeId = ps.Id,
                     ComboItem = comboItem
-                })
-                .ToList();
+                }).ToList();
 
             await _unitOfWork.ComboItems.AddAsync(comboItem);
             await _unitOfWork.SaveAsync();
@@ -99,24 +110,19 @@ namespace BAL.Services.Implement
 
         public async Task UpdateComboItemAsync(Guid id, ComboItemDto comboItemDto)
         {
-            // Validate input
             if (comboItemDto == null)
             {
                 throw new ArgumentNullException(nameof(comboItemDto));
             }
 
-            // Get existing combo item with relationships
-            var comboItem = await _unitOfWork.ComboItems
-                .GetAsync(
-                    c => c.Id == id,
-                    includeProperties: "ComboItemProductSizes");
+            var existingComboItem = await _unitOfWork.ComboItems
+                .GetAsync(c => c.Id == id, includeProperties: "ComboItemProductSizes");
 
-            if (comboItem == null)
+            if (existingComboItem == null)
             {
-                throw new Exception("ComboItem not found");
+                throw new KeyNotFoundException($"ComboItem with ID {id} was not found.");
             }
 
-            // Check if product sizes exist
             var existingProductSizes = await _unitOfWork.ProductSize
                 .GetAllAsync(ps => comboItemDto.ProductSizeIds.Contains(ps.Id));
 
@@ -129,39 +135,17 @@ namespace BAL.Services.Implement
                 throw new KeyNotFoundException($"The following ProductSize IDs were not found: {string.Join(", ", missingIds)}");
             }
 
-            // Update basic properties
-            _mapper.Map(comboItemDto, comboItem);
+            _mapper.Map(comboItemDto, existingComboItem);
 
-            // Update relationships
-            var currentProductSizeIds = comboItem.ComboItemProductSizes
-                .Select(cps => cps.ProductSizeId)
-                .ToList();
-
-            var productSizesToAdd = existingProductSizes
-                .Where(ps => !currentProductSizeIds.Contains(ps.Id))
-                .ToList();
-
-            var productSizesToRemove = comboItem.ComboItemProductSizes
-                .Where(cps => !comboItemDto.ProductSizeIds.Contains(cps.ProductSizeId))
-                .ToList();
-
-            // Remove old relationships
-            foreach (var item in productSizesToRemove)
-            {
-                comboItem.ComboItemProductSizes.Remove(item);
-            }
-
-            // Add new relationships
-            foreach (var productSize in productSizesToAdd)
-            {
-                comboItem.ComboItemProductSizes.Add(new ComboItemProductSize
+            existingComboItem.ComboItemProductSizes.Clear();
+            existingComboItem.ComboItemProductSizes = existingProductSizes
+                .Select(ps => new ComboItemProductSize
                 {
-                    ProductSizeId = productSize.Id,
-                    ComboItem = comboItem
-                });
-            }
+                    ProductSizeId = ps.Id,
+                    ComboItemId = existingComboItem.Id
+                }).ToList();
 
-            await _unitOfWork.ComboItems.UpdateAsync(comboItem);
+            _unitOfWork.ComboItems.UpdateAsync(existingComboItem);
             await _unitOfWork.SaveAsync();
         }
 
