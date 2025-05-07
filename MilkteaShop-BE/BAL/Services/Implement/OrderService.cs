@@ -9,11 +9,13 @@ namespace BAL.Services.Implement
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IVoucherService _voucherService;
         private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(IUnitOfWork unitOfWork, IVoucherService voucherService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _voucherService = voucherService;
             _mapper = mapper;
         }
 
@@ -342,13 +344,17 @@ namespace BAL.Services.Implement
             {
                 throw new Exception("Voucher not found");
             }
-            // Check if the voucher is valid for the order
             if (voucher.IsActive && order.TotalAmount >= voucher.PriceCondition)
             {
                 order.VoucherId = applyVoucherDto.VoucherId;
                 order.TotalAmount *= (voucher.DiscountPercentage/100);
                 await _unitOfWork.Orders.UpdateAsync(order);
+
+                voucher.IsActive = false;
+                await _unitOfWork.Vouchers.UpdateAsync(voucher);
+
                 await _unitOfWork.SaveAsync();
+
                 return true;
             }
             else
