@@ -11,6 +11,7 @@
         public IOrderItemRepository OrderItems { get; }
         public IProductSizeRepository ProductSize { get; }
         public IStoreRepository Stores { get; }
+        public IVoucherRepository Vouchers { get; }
 
         Task SaveAsync();
     }

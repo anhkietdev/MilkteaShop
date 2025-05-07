@@ -22,6 +22,7 @@ namespace DAL.Repositories.Implements
         public IOrderItemRepository OrderItems { get; private set; }
         public IProductSizeRepository ProductSize { get; private set; }
         public IStoreRepository Stores { get; }
+        public IVoucherRepository Vouchers { get; private set; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -35,7 +36,7 @@ namespace DAL.Repositories.Implements
             OrderItems = new OrderItemRepository(_context);
             ProductSize = new ProductSizeRepository(_context);
             Stores = new StoreRepository(_context);
-
+            Vouchers = new VoucherRepository(_context);
         }
 
         public async Task SaveAsync()

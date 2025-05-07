@@ -39,6 +39,7 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
             services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IVoucherRepository, VoucherRepository>();
 
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString, sqlOptions => {
                 sqlOptions.CommandTimeout(30);
