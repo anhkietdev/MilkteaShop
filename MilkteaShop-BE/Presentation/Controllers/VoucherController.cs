@@ -31,8 +31,8 @@ namespace Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] VoucherRequestDto voucherDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            //if (!ModelState.IsValid)
+            //    return BadRequest(ModelState);
             await _voucherService.CreateAsync(voucherDto);
             return Ok();
         }

@@ -5,6 +5,7 @@ using DAL.Context;
 using DAL.Repositories.Implements;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Update.Internal;
 
 namespace Presentation.ResolveDependencies
 {
@@ -22,6 +23,7 @@ namespace Presentation.ResolveDependencies
             services.AddScoped<IComboItemService, ComboItemService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IStoreService, StoreService>();
+            services.AddScoped<IVoucherService, VoucherService>();
 
             services.AddScoped<IOrderItemService, OrderItemService>();
             services.AddScoped<IProductSizeService, ProductSizeService>();            

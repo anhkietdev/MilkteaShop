@@ -35,6 +35,10 @@ namespace BAL.Services.Implement
         public async Task CreateAsync(VoucherRequestDto voucherDto)
         {
             var voucher = _mapper.Map<Voucher>(voucherDto);
+
+            voucher.VoucherCode = Voucher.GenerateVoucherNumber();
+            voucher.ExceedDate = DateTime.UtcNow.AddDays(5);
+
             await _unitOfWork.Vouchers.AddAsync(voucher);
             await _unitOfWork.SaveAsync();
         }
