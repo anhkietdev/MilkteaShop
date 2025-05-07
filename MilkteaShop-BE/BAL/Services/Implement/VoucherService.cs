@@ -17,12 +17,14 @@ namespace BAL.Services.Implement
         }
         public async Task<ICollection<VoucherResponseDto>> GetAllAsync()
         {
-            var vouchers = await _unitOfWork.Vouchers.GetAllAsync();
+            var includeProperties = "OrderList";
+            var vouchers = await _unitOfWork.Vouchers.GetAllAsync(null,includeProperties);
             return _mapper.Map<ICollection<VoucherResponseDto>>(vouchers);
         }
         public async Task<VoucherResponseDto> GetByIdAsync(Guid id)
         {
-            var voucher = await _unitOfWork.Vouchers.GetAsync( v => v.Id == id);
+            var includeProperties = "OrderList";
+            var voucher = await _unitOfWork.Vouchers.GetAsync(v => v.Id == id, includeProperties);
             return _mapper.Map<VoucherResponseDto>(voucher);
         }
         public async Task CreateAsync(VoucherRequestDto voucherDto)
