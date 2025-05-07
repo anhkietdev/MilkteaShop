@@ -9,7 +9,7 @@ namespace BAL.Dtos
         public decimal PriceCondition { get; set; }
         public decimal DiscountPercentage { get; set; }
         public DateTime ExceedDate { get; set; }
-        public List<Order>? OrderList { get; set; }
         public bool IsActive { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

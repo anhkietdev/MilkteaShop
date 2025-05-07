@@ -19,6 +19,11 @@ namespace BAL.Services.Implement
         {
             var includeProperties = "OrderList";
             var vouchers = await _unitOfWork.Vouchers.GetAllAsync(null,includeProperties);
+            if (vouchers == null || !vouchers.Any())
+            {
+                throw new Exception("No vouchers found");
+            }
+
             return _mapper.Map<ICollection<VoucherResponseDto>>(vouchers);
         }
         public async Task<VoucherResponseDto> GetByIdAsync(Guid id)
