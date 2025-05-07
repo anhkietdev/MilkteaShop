@@ -284,5 +284,52 @@ namespace BAL.Services.Implement
 
             return orders;
         }
+
+        public async Task<ICollection<TopSellingProductDto>> GetTop5BestSellingProductsAsync()
+        {
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.ProductSize.Product";
+
+            // Lấy tất cả các đơn hàng với các sản phẩm trong OrderItems
+            var orders = await _unitOfWork.Orders.GetAllAsync(
+                o => o.OrderItems.Any(), includeProperties);
+
+            // Đếm tổng số lượng sản phẩm bán được
+            var productSales = orders
+                .SelectMany(order => order.OrderItems)
+                .GroupBy(oi => oi.ProductSize.ProductId) // nhóm theo ProductId
+                .Select(group => new
+                {
+                    ProductId = group.Key,
+                    TotalQuantitySold = group.Sum(oi => oi.Quantity)
+                })
+                .OrderByDescending(product => product.TotalQuantitySold) // Sắp xếp theo số lượng bán
+                .Take(5) // Lấy top 5
+                .ToList();
+
+            // Tạo danh sách DTO cho kết quả trả về
+            var topSellingProducts = new List<TopSellingProductDto>();
+
+            foreach (var productSale in productSales)
+            {
+                var product = await _unitOfWork.Products.GetAsync(p => p.Id == productSale.ProductId);
+
+                if (product != null)
+                {
+                    topSellingProducts.Add(new TopSellingProductDto
+                    {
+                        ProductId = product.Id,
+                        ProductName = product.ProductName,
+                        ImageUrl = product.ImageUrl,
+                        CategoryId = product.CategoryId,
+                        TotalQuantitySold = productSale.TotalQuantitySold,
+
+                    });
+                }
+            }
+
+            return topSellingProducts;
+        }
+
+
     }
 }

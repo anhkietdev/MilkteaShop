@@ -16,5 +16,7 @@ namespace BAL.Services.Interface
         Task<OrderSummaryDto> GetMonthOrdersAsync(Guid? storeId = null);
         Task<OrderSummaryDto> GetYearOrdersAsync(Guid? storeId = null);
         Task<ICollection<OrderSummaryDto>> GetOrdersByStoreAsync(Guid storeId);
+
+        Task<ICollection<TopSellingProductDto>> GetTop5BestSellingProductsAsync();
     }
 }

@@ -116,5 +116,20 @@ namespace Presentation.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("top-selling-products")]
+        public async Task<IActionResult> GetTop5BestSellingProducts()
+        {
+            try
+            {
+                var result = await _orderService.GetTop5BestSellingProductsAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }
