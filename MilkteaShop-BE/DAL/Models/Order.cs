@@ -11,6 +11,8 @@
         public required virtual User User { get; set; }
         public Guid? StoreId { get; set; }
         public required virtual Store Store { get; set; }
+        public Guid? VoucherId { get; set; }
+        public Voucher? Voucher { get; set; }
         public static string GenerateOrderNumber()
         {
             var random = new Random();
