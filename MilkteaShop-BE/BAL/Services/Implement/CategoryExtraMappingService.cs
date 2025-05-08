@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BAL.Services.Implement
 {
@@ -21,63 +20,96 @@ namespace BAL.Services.Implement
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        //GetAll
-        public async Task<ICollection<CategoryExtraMapping>> GetAllCategoryExtraMappingAsync()
+
+        public async Task<ICollection<CategoryExtraMappingResponseDto>> GetAllCategoryExtraMappingAsync()
         {
-            ICollection<CategoryExtraMapping> categoryExtraMappings = await _unitOfWork.CategoryExtraMappings.GetAllAsync();
+            var categoryExtraMappings = await _unitOfWork.CategoryExtraMappings.GetAllAsync();
             if (categoryExtraMappings == null)
             {
-                throw new Exception("No categoryExtraMappings found");
+                throw new Exception("No category extra mappings found");
             }
-            return categoryExtraMappings;
-        }
-        //GetById
-        public async Task<CategoryExtraMapping> GetCategoryExtraMappingByIdAsync(Guid id)
-        {
-            CategoryExtraMapping? categoryExtraMappings = await _unitOfWork.CategoryExtraMappings.GetAsync(c => c.Id == id);
-            if (categoryExtraMappings == null)
+
+         
+            var categoryExtraMappingDtos = categoryExtraMappings.Select(cem =>
             {
-                throw new Exception("CategoryExtraMappings not found");
-            }
-            return categoryExtraMappings;
+                var mainCategory = cem.MainCategoryId != null ? _unitOfWork.Categories.GetAsync(c => c.Id == cem.MainCategoryId).Result : null;
+                var extraCategory = cem.ExtraCategoryId != null ? _unitOfWork.Categories.GetAsync(c => c.Id == cem.ExtraCategoryId).Result : null;
+
+                return new CategoryExtraMappingResponseDto
+                {
+                    Id = cem.Id,
+                    MainCategoryId = cem.MainCategoryId,
+                    ExtraCategoryId = cem.ExtraCategoryId,
+                    MainCategoryName = mainCategory?.CategoryName,
+                    ExtraCategoryName = extraCategory?.CategoryName,
+                    MainCategoryDescription = mainCategory?.Description,
+                    ExtraCategoryDescription = extraCategory?.Description
+                };
+            }).ToList();
+
+            return categoryExtraMappingDtos;
         }
 
+      
+        public async Task<CategoryExtraMappingResponseDto> GetCategoryExtraMappingByIdAsync(Guid id)
+        {
+            var categoryExtraMapping = await _unitOfWork.CategoryExtraMappings.GetAsync(c => c.Id == id);
+            if (categoryExtraMapping == null)
+            {
+                throw new Exception("CategoryExtraMapping not found");
+            }
+
+            var mainCategory = categoryExtraMapping.MainCategoryId != null ? await _unitOfWork.Categories.GetAsync(c => c.Id == categoryExtraMapping.MainCategoryId) : null;
+            var extraCategory = categoryExtraMapping.ExtraCategoryId != null ? await _unitOfWork.Categories.GetAsync(c => c.Id == categoryExtraMapping.ExtraCategoryId) : null;
+
+            var categoryExtraMappingDto = new CategoryExtraMappingResponseDto
+            {
+                Id = categoryExtraMapping.Id,
+                MainCategoryId = categoryExtraMapping.MainCategoryId,
+                ExtraCategoryId = categoryExtraMapping.ExtraCategoryId,
+                MainCategoryName = mainCategory?.CategoryName,
+                ExtraCategoryName = extraCategory?.CategoryName,
+                MainCategoryDescription = mainCategory?.Description,
+                ExtraCategoryDescription = extraCategory?.Description
+            };
+
+            return categoryExtraMappingDto;
+        }
+
+        
         public async Task CreateCategoryExtraMappingAsync(CategoryExtraMappingDto categoryExtraMappingDto)
         {
-            CategoryExtraMapping categoryExtraMappings = _mapper.Map<CategoryExtraMapping>(categoryExtraMappingDto);
-            await _unitOfWork.CategoryExtraMappings.AddAsync(categoryExtraMappings);
+            var categoryExtraMapping = _mapper.Map<CategoryExtraMapping>(categoryExtraMappingDto);
+            await _unitOfWork.CategoryExtraMappings.AddAsync(categoryExtraMapping);
             await _unitOfWork.SaveAsync();
         }
 
+  
         public async Task UpdateCategoryExtraMappingAsync(Guid id, CategoryExtraMappingDto categoryExtraMappingDto)
         {
-            CategoryExtraMapping? categoryExtraMappings = await _unitOfWork.CategoryExtraMappings.GetAsync(c => c.Id == id);
-            if (categoryExtraMappings == null)
+            var categoryExtraMapping = await _unitOfWork.CategoryExtraMappings.GetAsync(c => c.Id == id);
+            if (categoryExtraMapping == null)
             {
-                throw new Exception("Category not found");
+                throw new Exception("CategoryExtraMapping not found");
             }
-            _mapper.Map(categoryExtraMappingDto, categoryExtraMappings);
 
-            categoryExtraMappings.MainCategoryId = categoryExtraMappingDto.MainCategoryId;
-            categoryExtraMappings.ExtraCategoryId = categoryExtraMappingDto.ExtraCategoryId;
-
-
-
-            await _unitOfWork.CategoryExtraMappings.UpdateAsync(categoryExtraMappings);
+            _mapper.Map(categoryExtraMappingDto, categoryExtraMapping);
+            await _unitOfWork.CategoryExtraMappings.UpdateAsync(categoryExtraMapping);
             await _unitOfWork.SaveAsync();
         }
 
+       
         public async Task<bool> DeleteCategoryExtraMappingAsync(Guid id)
         {
-            CategoryExtraMapping? categoryExtraMappings = await _unitOfWork.CategoryExtraMappings.GetAsync(c => c.Id == id);
-            if (categoryExtraMappings == null)
+            var categoryExtraMapping = await _unitOfWork.CategoryExtraMappings.GetAsync(c => c.Id == id);
+            if (categoryExtraMapping == null)
             {
                 return false;
             }
-            await _unitOfWork.CategoryExtraMappings.RemoveAsync(categoryExtraMappings);
+
+            await _unitOfWork.CategoryExtraMappings.RemoveAsync(categoryExtraMapping);
             await _unitOfWork.SaveAsync();
             return true;
         }
     }
 }
-

@@ -11,7 +11,7 @@
         public IOrderItemRepository OrderItems { get; }
         public IProductSizeRepository ProductSize { get; }
         public IStoreRepository Stores { get; }
-
+        public IComboItemProductSizeRepository ComboItemProductSize { get; }
         Task SaveAsync();
     }
 }

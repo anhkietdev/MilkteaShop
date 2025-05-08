@@ -53,6 +53,11 @@ namespace DAL.Context
                       .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(c => c.CategoryExtraMappings)
+                      .WithOne(m => m.ExtraCategory)
+                      .HasForeignKey(m => m.ExtraCategoryId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(c => c.CategoryMainMappings) 
                       .WithOne(m => m.MainCategory)
                       .HasForeignKey(m => m.MainCategoryId)
                       .OnDelete(DeleteBehavior.Restrict);
@@ -63,17 +68,18 @@ namespace DAL.Context
             modelBuilder.Entity<CategoryExtraMapping>(entity =>
             {
                 entity.HasOne(m => m.MainCategory)
-                      .WithMany()
+                      .WithMany(c => c.CategoryMainMappings)
                       .HasForeignKey(m => m.MainCategoryId)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(m => m.ExtraCategory)
-                      .WithMany()
+                      .WithMany(c => c.CategoryExtraMappings)
                       .HasForeignKey(m => m.ExtraCategoryId)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasQueryFilter(e => e.DeletedAt == null);
             });
+
 
             modelBuilder.Entity<Product>(entity =>
             {
