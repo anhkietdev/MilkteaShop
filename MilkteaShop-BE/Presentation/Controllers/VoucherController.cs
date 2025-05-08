@@ -39,10 +39,8 @@ namespace Presentation.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] VoucherRequestDto voucherDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
             await _voucherService.UpdateAsync(id, voucherDto);
-            return NoContent();
+            return Ok();
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

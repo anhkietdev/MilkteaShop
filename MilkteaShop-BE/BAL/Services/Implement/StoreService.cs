@@ -105,6 +105,36 @@ namespace BAL.Services.Implement
             await _unitOfWork.SaveAsync();
             return true;
         }
+
+        public async Task<bool> AddMoneyToCaseBalance(Guid id, decimal money)
+        {
+            Store? store = await _unitOfWork.Stores.GetAsync(c => c.Id == id);
+            if (store == null)
+            {
+                return false;
+            }
+            store.CashBalance += money;
+            await _unitOfWork.Stores.UpdateAsync(store);
+            await _unitOfWork.SaveAsync();
+            return true;
+        }
+
+        public async Task<bool> SubtractMoneyFromCaseBalance(Guid id, decimal money)
+        {
+            Store? store = await _unitOfWork.Stores.GetAsync(c => c.Id == id);
+            if (store == null)
+            {
+                return false;
+            }
+            if (store.CashBalance < money)
+            {
+                return false;
+            }
+            store.CashBalance -= money;
+            await _unitOfWork.Stores.UpdateAsync(store);
+            await _unitOfWork.SaveAsync();
+            return true;
+        }
     }
 
 }

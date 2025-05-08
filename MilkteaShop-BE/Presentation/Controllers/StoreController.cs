@@ -161,5 +161,43 @@ namespace Presentation.Controllers
                 });
             }
         }
+
+        [HttpGet("add-money-to-cashbalance")]
+        public async Task<IActionResult> AddMoneyToCaseBalance([FromQuery] Guid id, [FromQuery] decimal money)
+        {
+            try
+            {
+                var result = await _storeService.AddMoneyToCaseBalance(id, money);
+                return result ? Ok() : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding money to case balance for store with id {Id}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    Message = $"An error occurred while adding money to case balance for store with id {id}",
+                    Details = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("subtract-money-from-cashbalance")]
+        public async Task<IActionResult> SubtractMoneyFromCaseBalance([FromQuery] Guid id, [FromQuery] decimal money)
+        {
+            try
+            {
+                var result = await _storeService.SubtractMoneyFromCaseBalance(id, money);
+                return result ? Ok() : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error subtracting money from case balance for store with id {Id}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    Message = $"An error occurred while subtracting money from case balance for store with id {id}",
+                    Details = ex.Message
+                });
+            }
+        }
     }
 }

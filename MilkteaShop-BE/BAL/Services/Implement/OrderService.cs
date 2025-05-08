@@ -344,10 +344,11 @@ namespace BAL.Services.Implement
             {
                 throw new Exception("Voucher not found");
             }
+            var currentAmount = order.TotalAmount;
             if (voucher.IsActive && order.TotalAmount >= voucher.PriceCondition)
             {
                 order.VoucherId = applyVoucherDto.VoucherId;
-                order.TotalAmount *= (voucher.DiscountPercentage/100);
+                order.TotalAmount = currentAmount - (order.TotalAmount * (voucher.DiscountPercentage/100));
                 await _unitOfWork.Orders.UpdateAsync(order);
 
                 voucher.IsActive = false;

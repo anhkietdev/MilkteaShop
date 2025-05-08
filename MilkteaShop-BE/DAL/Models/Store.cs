@@ -8,5 +8,6 @@ namespace DAL.Models
         public string? PhoneNumber { get; set; }
         public ICollection<User>? Users { get; set; } = new List<User>();
         public ICollection<Order>? Orders { get; set; } = new List<Order>();
+        public decimal CashBalance { get; set; } = 0;
     }
 }

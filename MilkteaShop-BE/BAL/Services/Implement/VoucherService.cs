@@ -46,7 +46,17 @@ namespace BAL.Services.Implement
         {
             var voucher = await _unitOfWork.Vouchers.GetAsync(v => v.Id == id);
             if (voucher == null) throw new Exception("Voucher not found");
+
             _mapper.Map(voucherDto, voucher);
+
+            voucher.VoucherCode = voucherDto.VoucherCode;
+            voucher.PriceCondition = voucherDto.PriceCondition;
+            voucher.DiscountPercentage = voucherDto.DiscountPercentage;
+            voucher.IsActive = voucherDto.IsActive;
+            voucher.ExceedDate = voucherDto.ExceedDate;
+
+            await _unitOfWork.Vouchers.UpdateAsync(voucher);
+
             await _unitOfWork.SaveAsync();
         }
         public async Task<bool> DeleteAsync(Guid id)

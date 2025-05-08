@@ -13,6 +13,7 @@
         public required virtual Store Store { get; set; }
         public Guid? VoucherId { get; set; }
         public Voucher? Voucher { get; set; }
+        public string? OrderStatus { get; set; }
         public static string GenerateOrderNumber()
         {
             var random = new Random();
