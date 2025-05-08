@@ -24,6 +24,16 @@ namespace Presentation.Controllers
             }
             return Ok(result);
         }
+        [HttpPost("create-combo")]
+        public async Task<IActionResult> CreateOrderCombo([FromBody] OrderComboRequest orderDto)
+        {
+            var result = await _orderService.CreateOrderComboAsync(orderDto);
+            if (result is null)
+            {
+                return BadRequest(new { message = "Order creation failed" });
+            }
+            return Ok(result);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()

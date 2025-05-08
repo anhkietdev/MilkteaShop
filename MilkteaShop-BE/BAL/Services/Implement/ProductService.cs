@@ -3,6 +3,7 @@ using BAL.Dtos;
 using BAL.Services.Interface;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace BAL.Services.Implement
 {
@@ -39,7 +40,8 @@ namespace BAL.Services.Implement
         public async Task<ICollection<Product>> GetAllAsync()
         {
             string? includeProperties = "Category,ProductSizes";
-            ICollection<Product> products = await _unitOfWork.Products.GetAllAsync(null, includeProperties);
+            Expression<Func<Product, bool>> filter = p => p.ProductType != "Combo";
+            ICollection<Product> products = await _unitOfWork.Products.GetAllAsync(filter, includeProperties);
             if (products == null)
             {
                 throw new Exception("No products found");

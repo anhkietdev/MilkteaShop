@@ -45,6 +45,7 @@ namespace BAL.Services.Implement
                     ProductId = cips.ProductSize?.ProductId ?? Guid.Empty,
                     ProductName = cips.ProductSize?.Product?.ProductName ?? "Unknown",
                     ImageUrl = cips.ProductSize?.Product?.ImageUrl ?? "Unknown",
+                    ProductType = cips.ProductSize?.Product.ProductType ?? "Unknown",
                     ProductSize = new ComboProductSizeResponseDto
                     {
                         ProductSizeId = cips.ProductSize?.Id ?? Guid.Empty,
@@ -134,7 +135,9 @@ namespace BAL.Services.Implement
                     Description = productDto.Description,
                     CategoryId = productDto.CategoryId,
                     ImageUrl = productDto.ImageUrl,
-                    IsActive = productDto.IsActive
+                    IsActive = productDto.IsActive,
+                    ProductType = "Combo"
+
                 };
 
                 await _unitOfWork.Products.AddAsync(product);
@@ -206,6 +209,7 @@ namespace BAL.Services.Implement
                         product.CategoryId = productDto.CategoryId;
                         product.ImageUrl = productDto.ImageUrl;
                         product.IsActive = productDto.IsActive;
+                        product.ProductType = "Combo";
 
                         await _unitOfWork.Products.UpdateAsync(product);
                         await _unitOfWork.SaveAsync();
