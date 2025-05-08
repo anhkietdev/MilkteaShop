@@ -86,7 +86,7 @@ namespace BAL.Services.Implement
 
         public async Task<ICollection<OrderResponseDto>> GetAllAsync()
         {
-            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings";
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings,Voucher";
             ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync(null,includeProperties);
             if (orders == null)
             {
