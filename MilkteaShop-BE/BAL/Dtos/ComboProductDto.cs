@@ -14,6 +14,7 @@ namespace BAL.Dtos
         public Guid CategoryId { get; set; }
         public string? ImageUrl { get; set; }
         public bool IsActive { get; set; }
+        public string? ProductType { get; set; } = "Combo";
         public ComboItemProductSizeDto ProductSize { get; set; } = new ComboItemProductSizeDto();
     }
 }
