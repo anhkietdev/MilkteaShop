@@ -363,5 +363,68 @@ namespace BAL.Services.Implement
                 throw new Exception("Voucher is not valid for this order");
             }
         }
+        public async Task<OrderResponseDto> CreateOrderComboAsync(OrderComboRequest orderRequest)
+        {
+            var orderNumber = Order.GenerateOrderNumber();
+            var newOrder = _mapper.Map<Order>(orderRequest);
+
+            newOrder.OrderNumber = orderNumber;
+            newOrder.CreatedAt = DateTime.UtcNow;
+            newOrder.PaymentMethod = orderRequest.PaymentMethod;
+            newOrder.StoreId = orderRequest.StoreId;
+            newOrder.TotalAmount = 0;
+            newOrder.OrderStatus = "Processing";
+            newOrder.TotalAmount += await ProcessComboItemsAsync(orderRequest.ComboItems, newOrder);
+
+            await _unitOfWork.Orders.AddAsync(newOrder);
+            await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<OrderResponseDto>(newOrder);
+        }
+
+        private async Task<decimal> ProcessComboItemsAsync(IEnumerable<Guid> comboItems, Order newOrder)
+        {
+            if (comboItems == null || !comboItems.Any()) return 0;
+
+            decimal totalAmount = 0;
+
+            var combos = await _unitOfWork.ComboItems.GetAllAsync(
+                c => comboItems.Contains(c.Id),
+                includeProperties: "ComboItemProductSizes.ProductSize"
+            );
+
+            foreach (var comboId in comboItems)
+            {
+                var combo = combos.FirstOrDefault(c => c.Id == comboId);
+
+                if (combo == null)
+                {
+                    throw new ArgumentException($"Combo with ID {comboId} not found.");
+                }
+
+                foreach (var comboItem in combo.ComboItemProductSizes)
+                {
+                    var productSize = comboItem.ProductSize;
+                    if (productSize == null)
+                    {
+                        throw new ArgumentException($"ProductSize with ID {comboItem.ProductSizeId} not found in Combo Item.");
+                    }
+
+                    var orderItem = new OrderItem
+                    {
+                        ProductSizeId = productSize.Id,
+                        Quantity = comboItem.Quantity,
+                        Price = productSize.Price,
+                        Description = $"Combo: {combo.Description}",
+                        Order = newOrder,
+                    };
+
+                    newOrder.OrderItems.Add(orderItem);
+                    totalAmount += orderItem.Price * orderItem.Quantity;
+                }
+            }
+
+            return totalAmount;
+        }
     }
 }

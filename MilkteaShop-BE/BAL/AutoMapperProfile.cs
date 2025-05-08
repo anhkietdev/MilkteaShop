@@ -91,6 +91,7 @@ namespace BAL
 
 
             CreateMap<Order, OrderRequestDto>().ReverseMap();
+            CreateMap<Order, OrderComboRequest>().ReverseMap();
 
             CreateMap<Order, OrderStoreResponseDto>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
