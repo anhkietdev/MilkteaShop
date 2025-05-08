@@ -8,7 +8,6 @@ namespace BAL.Dtos
 {
     public class CategoryExtraMappingDto
     {
-        public Guid Id { get; set; }
         public Guid MainCategoryId { get; set; }
         public Guid ExtraCategoryId { get; set; }
 
