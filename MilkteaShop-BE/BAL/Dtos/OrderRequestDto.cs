@@ -12,5 +12,6 @@ namespace BAL.Dtos
         public Guid? StoreId { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; }          
         public string? OrderStatus { get; set; } = "Processing";
+        public virtual List<Guid>? ComboItems { get; set; } = new List<Guid>();
     }
 }
