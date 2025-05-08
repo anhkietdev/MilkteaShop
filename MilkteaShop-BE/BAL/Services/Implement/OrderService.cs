@@ -86,7 +86,7 @@ namespace BAL.Services.Implement
 
         public async Task<ICollection<OrderResponseDto>> GetAllAsync()
         {
-            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings";
+            string includeProperties = "OrderItems,OrderItems.ProductSize,OrderItems.Toppings,Voucher";
             ICollection<Order> orders = await _unitOfWork.Orders.GetAllAsync(null,includeProperties);
             if (orders == null)
             {
@@ -119,6 +119,9 @@ namespace BAL.Services.Implement
             existingOrder.TotalAmount = order.TotalAmount;
             existingOrder.Description = order.Description;
             existingOrder.PaymentMethod = order.PaymentMethod;
+            existingOrder.OrderStatus = order.OrderStatus;
+            existingOrder.StoreId = order.StoreId;
+            existingOrder.UserId = order.UserId;
 
             // Handle order items if they exist in the request
             if (order.OrderItems != null && order.OrderItems.Any())
@@ -144,6 +147,7 @@ namespace BAL.Services.Implement
                     existingOrder.OrderItems.Add(orderItem);
                 }
             }
+            await _unitOfWork.Orders.UpdateAsync(existingOrder);
             await _unitOfWork.SaveAsync();
             OrderResponseDto orderResponse = _mapper.Map<OrderResponseDto>(existingOrder);
             return orderResponse;
