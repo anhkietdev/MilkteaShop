@@ -10,13 +10,12 @@ namespace BAL.Services.Interface
         Task<OrderResponseDto> GetOrderByIdAsync(Guid id);
         Task<OrderResponseDto> UpdateOrderAsync(Guid id, OrderRequestDto order);
         Task<bool> DeleteOrderAsync(Guid id);
-
         Task<OrderSummaryDto> GetTodayOrdersAsync(Guid? storeId = null);
         Task<OrderSummaryDto> GetWeekOrdersAsync(Guid? storeId = null);
         Task<OrderSummaryDto> GetMonthOrdersAsync(Guid? storeId = null);
         Task<OrderSummaryDto> GetYearOrdersAsync(Guid? storeId = null);
         Task<ICollection<OrderSummaryDto>> GetOrdersByStoreAsync(Guid storeId);
-
+        Task<bool> ApplyVoucher(ApplyVoucherDto applyVoucherDto);
         Task<ICollection<TopSellingProductDto>> GetTop5BestSellingProductsAsync();
     }
 }

@@ -16,9 +16,9 @@ namespace DAL.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<ComboItemProductSize> ComboItemProductSizes { get; set; }
-
         public DbSet<ProductSize> ProductSize { get; set; }
         public DbSet<OrderItemTopping> OrderItemToppings { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
 
         #endregion
 

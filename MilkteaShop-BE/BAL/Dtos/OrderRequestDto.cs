@@ -10,6 +10,7 @@ namespace BAL.Dtos
         public PaymentMethod PaymentMethod { get; set; }
         public Guid UserId { get; set; }
         public Guid? StoreId { get; set; }
-        public virtual ICollection<OrderItem>? OrderItems { get; set; }                
+        public virtual ICollection<OrderItem>? OrderItems { get; set; }          
+        public string? OrderStatus { get; set; } = "Processing";
     }
 }

@@ -9,11 +9,13 @@ namespace BAL.Services.Implement
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IVoucherService _voucherService;
         private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(IUnitOfWork unitOfWork, IVoucherService voucherService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _voucherService = voucherService;
             _mapper = mapper;
         }
 
@@ -330,6 +332,36 @@ namespace BAL.Services.Implement
             return topSellingProducts;
         }
 
+        public async Task<bool> ApplyVoucher(ApplyVoucherDto applyVoucherDto)
+        {
+            var order = await _unitOfWork.Orders.GetAsync(o => o.Id == applyVoucherDto.OrderId);
+            if (order == null)
+            {
+                throw new Exception("Order not found");
+            }
+            var voucher = await _unitOfWork.Vouchers.GetAsync(v => v.Id == applyVoucherDto.VoucherId);
+            if (voucher == null)
+            {
+                throw new Exception("Voucher not found");
+            }
+            var currentAmount = order.TotalAmount;
+            if (voucher.IsActive && order.TotalAmount >= voucher.PriceCondition)
+            {
+                order.VoucherId = applyVoucherDto.VoucherId;
+                order.TotalAmount = currentAmount - (order.TotalAmount * (voucher.DiscountPercentage/100));
+                await _unitOfWork.Orders.UpdateAsync(order);
 
+                voucher.IsActive = false;
+                await _unitOfWork.Vouchers.UpdateAsync(voucher);
+
+                await _unitOfWork.SaveAsync();
+
+                return true;
+            }
+            else
+            {
+                throw new Exception("Voucher is not valid for this order");
+            }
+        }
     }
 }

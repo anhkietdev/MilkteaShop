@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250508150226_addCashAndOrderStatus")]
+    partial class addCashAndOrderStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +67,9 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -89,6 +95,8 @@ namespace DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ExtraCategoryId");
 
@@ -564,14 +572,18 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.CategoryExtraMapping", b =>
                 {
-                    b.HasOne("DAL.Models.Category", "ExtraCategory")
+                    b.HasOne("DAL.Models.Category", null)
                         .WithMany("CategoryExtraMappings")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("DAL.Models.Category", "ExtraCategory")
+                        .WithMany()
                         .HasForeignKey("ExtraCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DAL.Models.Category", "MainCategory")
-                        .WithMany("CategoryMainMappings")
+                        .WithMany()
                         .HasForeignKey("MainCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -704,8 +716,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Models.Category", b =>
                 {
                     b.Navigation("CategoryExtraMappings");
-
-                    b.Navigation("CategoryMainMappings");
 
                     b.Navigation("Products");
                 });

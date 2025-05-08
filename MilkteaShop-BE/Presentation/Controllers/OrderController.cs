@@ -117,6 +117,17 @@ namespace Presentation.Controllers
             return Ok(result);
         }
 
+        [HttpPost("apply-voucher")]
+        public async Task<IActionResult> ApplyVoucher([FromBody]ApplyVoucherDto applyVoucherDto)
+        {
+            var result = await _orderService.ApplyVoucher(applyVoucherDto);
+            if (result is false)
+            {
+                return BadRequest(new { message = "Failed to apply voucher" });
+            }
+            return Ok("Apply voucher successfull");
+        }
+
         [HttpGet("top-selling-products")]
         public async Task<IActionResult> GetTop5BestSellingProducts()
         {
