@@ -13,6 +13,8 @@ namespace BAL.Dtos
         public string Description { get; set; }
         public string ImageUrl { get; set; } 
         public bool IsActive { get; set; }
+        public string? ProductType { get; set; } 
+
         public ComboProductSizeResponseDto ProductSize { get; set; } = new ComboProductSizeResponseDto();
     }
 }
