@@ -2,6 +2,7 @@
 {
     public class CategoryExtraMapping : BaseEntity
     {
+
         public Guid MainCategoryId { get; set; }
         public virtual Category MainCategory { get; set; }
         public Guid ExtraCategoryId { get; set; }

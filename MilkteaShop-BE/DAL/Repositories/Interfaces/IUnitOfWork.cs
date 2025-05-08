@@ -1,4 +1,4 @@
-﻿namespace DAL.Repositories.Interfaces
+namespace DAL.Repositories.Interfaces
 {
     public interface IUnitOfWork
     {
@@ -11,6 +11,7 @@
         public IOrderItemRepository OrderItems { get; }
         public IProductSizeRepository ProductSize { get; }
         public IStoreRepository Stores { get; }
+        public IComboItemProductSizeRepository ComboItemProductSize { get; }
         public IVoucherRepository Vouchers { get; }
 
         Task SaveAsync();

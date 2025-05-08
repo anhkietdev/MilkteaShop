@@ -1,4 +1,5 @@
-﻿using DAL.Context;
+using DAL.Context;
+using DAL.Models;
 using DAL.Repositories.Interfaces;
 
 namespace DAL.Repositories.Implements
@@ -22,6 +23,7 @@ namespace DAL.Repositories.Implements
         public IOrderItemRepository OrderItems { get; private set; }
         public IProductSizeRepository ProductSize { get; private set; }
         public IStoreRepository Stores { get; }
+        public IComboItemProductSizeRepository ComboItemProductSize { get; private set; }
         public IVoucherRepository Vouchers { get; private set; }
 
         public UnitOfWork(AppDbContext context)
@@ -36,6 +38,8 @@ namespace DAL.Repositories.Implements
             OrderItems = new OrderItemRepository(_context);
             ProductSize = new ProductSizeRepository(_context);
             Stores = new StoreRepository(_context);
+            ComboItemProductSize = new ComboItemProductSizeRepository(_context);
+
             Vouchers = new VoucherRepository(_context);
         }
 
