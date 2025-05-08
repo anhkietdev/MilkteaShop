@@ -14,5 +14,7 @@ namespace DAL.Models
 
         public Guid ProductSizeId { get; set; }
         public ProductSize ProductSize { get; set; }
+        public int Quantity { get; set; } 
+
     }
 }
