@@ -51,7 +51,7 @@ namespace BAL.Services.Implement
                 ImageUrl = user.ImageUrl,
                 Role = user.Role.ToString(),
                 IsActive = user.IsActive,
-                UserId = user.Id,
+                Id = user.Id,
 
             };
         }
