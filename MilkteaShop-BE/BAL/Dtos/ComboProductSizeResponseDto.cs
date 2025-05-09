@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace BAL.Dtos
     public class ComboProductSizeResponseDto
     {
         public Guid ProductSizeId { get; set; }
-        public string Size { get; set; }
+        public Size? Size { get; set; }
         public decimal Price { get; set; }
     }
 }
