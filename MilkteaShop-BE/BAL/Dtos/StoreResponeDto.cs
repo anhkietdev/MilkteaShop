@@ -21,5 +21,6 @@ namespace BAL.Dtos
 
         public List<Guid>? UserIds { get; set; } = new();
         public List<Guid>? OrderIds { get; set; } = new();
+        public decimal CashBalance { get; set; }
     }
 }

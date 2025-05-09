@@ -84,6 +84,7 @@ namespace BAL
        .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users))  // Assuming Users is a collection
        .ForMember(dest => dest.UserIds, opt => opt.MapFrom(src => src.Users.Select(u => u.Id).ToList())) // Example for mapping UserIds from a collection of UserDto
        .ForMember(dest => dest.OrderIds, opt => opt.MapFrom(src => src.Orders.Select(o => o.Id).ToList()))  // Example for mapping OrderIds from a collection of OrderDto
+         .ForMember(dest => dest.CashBalance, opt => opt.MapFrom(src => src.CashBalance))
        .ReverseMap();
 
 
@@ -95,14 +96,14 @@ namespace BAL
 
             CreateMap<Order, OrderStoreResponseDto>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
-                
+
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod))
                 .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.TotalAmount))
-                
+
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.OrderNumber, opt => opt.MapFrom(src => src.OrderNumber))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                
+
                 .ReverseMap();
             CreateMap<Order, OrderResponseDto>()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems))
