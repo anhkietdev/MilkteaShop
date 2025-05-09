@@ -49,7 +49,7 @@ namespace BAL.Services.Implement
                     ProductSize = new ComboProductSizeResponseDto
                     {
                         ProductSizeId = cips.ProductSize?.Id ?? Guid.Empty,
-                        Size = cips.ProductSize?.Size?.ToString() ?? "Unknown",
+                        Size = cips.ProductSize?.Size,
                         Price = cips.ProductSize?.Price ?? 0,
                     }
                 }).ToList() ?? new List<ComboProductResponseDto>()
@@ -77,12 +77,12 @@ namespace BAL.Services.Implement
                 {
                     ProductId = cips.ProductSize?.ProductId ?? Guid.Empty,
                     ProductName = cips.ProductSize?.Product?.ProductName ?? "Unknown",
-                    ImageUrl = cips.ProductSize?.Product?.ImageUrl ?? "Unknown",  // Assuming the Product has an ImageUrl property
+                    ImageUrl = cips.ProductSize?.Product?.ImageUrl ?? "Unknown",  
 
                     ProductSize = new ComboProductSizeResponseDto
                     {
                         ProductSizeId = cips.ProductSize?.Id ?? Guid.Empty,
-                        Size = cips.ProductSize?.Size?.ToString() ?? "Unknown",
+                        Size = cips.ProductSize?.Size,
                         Price = cips.ProductSize?.Price ?? 0,
                     }
                 }).ToList() ?? new List<ComboProductResponseDto>()
