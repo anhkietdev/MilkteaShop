@@ -25,6 +25,7 @@ namespace BAL.Services.Implement
             var user = await _unitOfWork.Users.GetAsync(
                 u => (u.Username == loginDto.Username || u.PhoneNumber == loginDto.PhoneNumber)
                      && u.PasswordHash == loginDto.Password,
+                includeProperties: "Store",
                 tracked: false
             );
 
@@ -52,7 +53,7 @@ namespace BAL.Services.Implement
                 Role = user.Role.ToString(),
                 IsActive = user.IsActive,
                 Id = user.Id,
-
+                StoreId = user.StoreId,
             };
         }
 
