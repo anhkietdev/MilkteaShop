@@ -87,7 +87,7 @@ namespace Presentation.Controllers.AuthenticationController
             try
             {
                 await _userService.UpdateUserAsync(id, userDto);
-                return NoContent(); // 204 No Content
+                return Ok(); // 204 No Content
             }
             catch (KeyNotFoundException ex)
             {
