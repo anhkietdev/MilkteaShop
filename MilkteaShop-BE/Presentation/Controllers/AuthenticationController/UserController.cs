@@ -95,6 +95,7 @@ namespace Presentation.Controllers.AuthenticationController
             }
         }
 
+
         [HttpPost("deposit")]
         public async Task<IActionResult> AddMoney([FromBody] AddMoneyRequest request)
         {
