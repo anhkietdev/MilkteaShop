@@ -39,6 +39,7 @@ namespace BAL.Services.Implement
                 Id = comboItem.Id,
                 ComboCode = comboItem.ComboCode,
                 Description = comboItem.Description,
+                IsActive= comboItem.IsActive,
                 Price = comboItem.Price,
                 Products = comboItem.ComboItemProductSizes?.Select(cips => new ComboProductResponseDto
                 {
@@ -70,6 +71,7 @@ namespace BAL.Services.Implement
             {
                 Id = comboItem.Id,
                 ComboCode = comboItem.ComboCode,
+                IsActive = comboItem.IsActive,
                 Description = comboItem.Description,
                 Price = comboItem.Price,
 
@@ -107,6 +109,8 @@ namespace BAL.Services.Implement
             {
                 ComboCode = comboItemDto.ComboCode,
                 Description = comboItemDto.Description,
+                IsActive = comboItemDto.IsActive,
+
                 Price = comboItemDto.Price,
                 ComboItemProductSizes = new List<ComboItemProductSize>()
             };
@@ -183,6 +187,7 @@ namespace BAL.Services.Implement
 
             existingComboItem.ComboCode = comboItemDto.ComboCode;
             existingComboItem.Description = comboItemDto.Description;
+            existingComboItem.IsActive = comboItemDto.IsActive;
             existingComboItem.Price = comboItemDto.Price;
 
             var existingProductSizes = existingComboItem.ComboItemProductSizes.ToList();
