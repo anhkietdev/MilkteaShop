@@ -33,7 +33,8 @@ namespace BAL
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
-                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt));
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
+                .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.StoreId)).ReverseMap();
 
             // NewRegisterDto to User mapping - critical for registration
             CreateMap<NewRegisterDto, User>()
