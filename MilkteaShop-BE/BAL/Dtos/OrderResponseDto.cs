@@ -16,5 +16,6 @@ namespace BAL.Dtos
         public DateTime CreatedAt { get; set; }
         public string? OrderStatus { get; set; }
         public Guid? VoucherId { get; set; }
+        public Voucher Voucher { get; set; }
     }
 }
