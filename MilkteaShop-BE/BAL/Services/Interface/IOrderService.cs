@@ -18,5 +18,7 @@ namespace BAL.Services.Interface
         Task<bool> ApplyVoucher(ApplyVoucherDto applyVoucherDto);
         Task<ICollection<TopSellingProductDto>> GetTop5BestSellingProductsAsync();
         Task<OrderResponseDto> CreateOrderComboAsync(OrderComboRequest orderRequest);
+
+        Task<RequiredOrderDto> GetOrderRelatedAmount(Guid orderId);
     }
 }

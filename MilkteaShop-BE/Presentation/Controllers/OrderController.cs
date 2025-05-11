@@ -152,5 +152,19 @@ namespace Presentation.Controllers
             }
         }
 
+        [HttpGet("order-related-amount/{orderId}")]
+        public async Task<IActionResult> GetOrderRelatedAmount([FromRoute] Guid orderId)
+        {
+            try
+            {
+                var result = await _orderService.GetOrderRelatedAmount(orderId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }
