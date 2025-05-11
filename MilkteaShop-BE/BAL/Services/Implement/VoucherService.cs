@@ -67,5 +67,26 @@ namespace BAL.Services.Implement
             await _unitOfWork.SaveAsync();
             return true;
         }
+        public async Task<RequiredOrderDto> GetOrderRelatedAmount(Guid orderId)
+        {
+            var order = await _unitOfWork.Orders.GetAsync(o => o.Id == orderId);
+            if (order == null)
+            {
+                throw new Exception("Order not found");
+            }
+            var voucher = await _unitOfWork.Vouchers.GetAsync(v => v.Id == order.VoucherId);
+            if (voucher == null)
+            {
+                throw new Exception("Voucher not found");
+            }
+            return new RequiredOrderDto
+            {
+                OrderId = order.Id,
+                TotalPrice = order.TotalAmount / (voucher.DiscountPercentage / 100),
+                VoucherId = voucher.Id,
+                PercentageDiscount = voucher.DiscountPercentage,
+                AmountDiscount = order.TotalAmount
+            };
+        }
     }
 }

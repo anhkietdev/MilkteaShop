@@ -1,4 +1,5 @@
 ﻿using BAL.Dtos;
+using BAL.Services.Implement;
 using BAL.Services.Interface;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -50,5 +51,19 @@ namespace Presentation.Controllers
                 return NotFound();
             return NoContent();
         }
+        [HttpGet("{orderId}/related-amount")]
+        public async Task<IActionResult> GetOrderRelatedAmount(Guid orderId)
+        {
+            try
+            {
+                var result = await _voucherService.GetOrderRelatedAmount(orderId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
     }
 }

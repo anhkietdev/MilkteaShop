@@ -9,5 +9,6 @@ namespace BAL.Services.Interface
         Task CreateAsync(VoucherRequestDto voucherDto);
         Task UpdateAsync(Guid id, VoucherRequestDto voucherDto);
         Task<bool> DeleteAsync(Guid id);
+        Task<RequiredOrderDto> GetOrderRelatedAmount(Guid orderId);
     }
 }
