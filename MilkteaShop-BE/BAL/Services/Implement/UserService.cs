@@ -25,6 +25,7 @@ namespace BAL.Services.Implement
             var user = await _unitOfWork.Users.GetAsync(
                 u => (u.Username == loginDto.Username || u.PhoneNumber == loginDto.PhoneNumber)
                      && u.PasswordHash == loginDto.Password,
+                includeProperties: "Store",
                 tracked: false
             );
 
@@ -51,8 +52,8 @@ namespace BAL.Services.Implement
                 ImageUrl = user.ImageUrl,
                 Role = user.Role.ToString(),
                 IsActive = user.IsActive,
-                UserId = user.Id,
-
+                Id = user.Id,
+                StoreId = user.StoreId,
             };
         }
 
@@ -164,23 +165,16 @@ namespace BAL.Services.Implement
 
             _mapper.Map(userDto, user);
 
-            user.Username = userDto.Username;
-            user.Email = userDto.Email;
-            user.PhoneNumber = userDto.PhoneNumber;
-            user.ImageUrl = userDto.ImageUrl;
-            user.IsActive = userDto.IsActive;
-            user.UpdatedAt = userDto.UpdatedAt;
-            user.CreatedAt = userDto.CreatedAt;
-
-            // Safe parsing of Role from string
-            if (Enum.TryParse<Role>(userDto.Role, true, out var role)) // true => case-insensitive
-            {
-                user.Role = role;
-            }
-            else
-            {
-                throw new ArgumentException($"Invalid role value: {userDto.Role}");
-            }
+            //user.Username = userDto.Username;
+            //user.PasswordHash = userDto.PasswordHash;
+            //user.Email = userDto.Email;
+            //user.PhoneNumber = userDto.PhoneNumber;
+            //user.ImageUrl = userDto.ImageUrl;
+            //user.Role = userDto.Role;
+            //user.StoreId = userDto.StoreId;
+            //user.IsActive = userDto.IsActive;
+            user.UpdatedAt = DateTime.UtcNow; ;
+            //user.CreatedAt = userDto.CreatedAt;
 
             await _unitOfWork.Users.UpdateAsync(user);
             await _unitOfWork.SaveAsync();

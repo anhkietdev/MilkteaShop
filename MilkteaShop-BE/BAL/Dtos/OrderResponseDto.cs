@@ -14,6 +14,8 @@ namespace BAL.Dtos
         public Guid? StoreId { get; set; }
         public required virtual Store Store { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string? OrderStatus { get; set; } 
+        public string? OrderStatus { get; set; }
+        public Guid? VoucherId { get; set; }
+        public Voucher Voucher { get; set; }
     }
 }

@@ -33,7 +33,8 @@ namespace BAL
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
-                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt));
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
+                .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.StoreId)).ReverseMap();
 
             // NewRegisterDto to User mapping - critical for registration
             CreateMap<NewRegisterDto, User>()
@@ -66,9 +67,10 @@ namespace BAL
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()))
+                .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.StoreId))
                 .ForMember(dest => dest.Token, opt => opt.Ignore())
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
 
 
@@ -117,6 +119,8 @@ namespace BAL
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Store, opt => opt.MapFrom(src => src.Store))
                 .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.OrderStatus))
+                .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
+                .ForMember(dest => dest.Voucher, opt => opt.MapFrom(src => src.Voucher))
                 .ReverseMap();
 
             CreateMap<ProductSize, ProductSizeResponseDto>()
