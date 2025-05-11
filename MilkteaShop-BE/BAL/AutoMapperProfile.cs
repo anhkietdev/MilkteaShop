@@ -119,6 +119,7 @@ namespace BAL
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Store, opt => opt.MapFrom(src => src.Store))
                 .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.OrderStatus))
+                .ForMember(dest => dest.VoucherId, opt => opt.MapFrom(src => src.VoucherId))
                 .ReverseMap();
 
             CreateMap<ProductSize, ProductSizeResponseDto>()
